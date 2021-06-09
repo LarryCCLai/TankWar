@@ -13,6 +13,6 @@ class QueryPlayer:
             player = player[0]
             response = {'status': 'OK', 'name': player['name']}
         else:
-            response ={'status': 'Fail', 'reason': 'The name is not found.'} 
+            response = {'status': 'Fail', 'reason': 'The name is not found.'} 
         
         return response

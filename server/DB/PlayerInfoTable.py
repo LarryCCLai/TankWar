@@ -11,7 +11,7 @@ class PlayerInfoTable:
             cursor = connection.cursor()
             cursor.execute(command)
             connection.commit()
-
+            
     def select_a_player(self, name):
         command = "SELECT * FROM player_info WHERE name='{}';".format(name)
 
@@ -19,9 +19,18 @@ class PlayerInfoTable:
             cursor = connection.cursor()
             cursor.execute(command)
             record_from_db = cursor.fetchall()
-        
         return [row for row in record_from_db]
 
+    def login_check(self, name, password):
+        command = "SELECT * FROM player_info WHERE name='{}' and password='{}';".format(name, password)
+
+        with DBConnection() as connection:
+            cursor = connection.cursor()
+            cursor.execute(command)
+            record_from_db = cursor.fetchall()
+            
+        return [row for row in record_from_db]
+    
     def delete_a_student(self, stu_id):
         command = "DELETE FROM student_info WHERE stu_id='{}';".format(stu_id)
 
