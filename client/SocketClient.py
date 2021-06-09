@@ -7,6 +7,8 @@ BUFFER_SIZE = 1940
 
 class SocketClient:
     def __init__(self, host, port):
+        self.host = host
+        self.port = port
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
         self.client_socket.connect((host, port))
  

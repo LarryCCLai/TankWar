@@ -3,18 +3,18 @@ import socket
 import json
 import time
 
+from JobDispatcher import JobDispatcher
+
 class SocketServer(Thread):
     def __init__(self, host, port, accept_num=10):
         super().__init__()
-        self.job_dispatcher = None
+        self.job_dispatcher = JobDispatcher()
+        
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # This following setting is to avoid the server crash. So, the binded address can be reused
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server_socket.bind((host, port))
         self.server_socket.listen(accept_num)
-
-    def set_job_dispatcher(self, job_dispatcher):
-        self.job_dispatcher = job_dispatcher
 
     def serve(self):
         self.start()
@@ -52,6 +52,8 @@ class SocketServer(Thread):
                     connection.send("closing".encode())
                     break
                 else:
+                    message['parameters']['address']= address
+                    # Thread
                     reply_msg = self.job_dispatcher.execute(command = message['command'], params = message['parameters'])    
                     connection.send(json.dumps(reply_msg).encode())
         

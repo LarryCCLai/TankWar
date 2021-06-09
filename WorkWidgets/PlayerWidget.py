@@ -2,8 +2,16 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from WorkWidgetComponents import LabelComponent, LineEditComponent, ButtonComponent
 import json
 from WorkWidgets.ExecuteCommand import ExecuteCommand
-
+from WorkWidgets.RepeatingTimer import RepeatingTimer
+import threading
+from threading import Timer
 import json
+from client.SocketClient import SocketClient
+
+host = "127.0.0.1"
+port = 20001
+cancel_lock = threading.Lock()
+cancel_client = SocketClient(host, port)
 
 class PlayerWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
@@ -13,6 +21,8 @@ class PlayerWidget(QtWidgets.QWidget):
         self.client = client
         self.update_widget_callback = update_widget_callback
         self.player_info = None
+        self.timer = None
+        self.wait_time = 0
         self.setObjectName('player_widget')
 
         header_label = LabelComponent(20, 'Player Information')
@@ -28,6 +38,7 @@ class PlayerWidget(QtWidgets.QWidget):
         self.play_btn = ButtonComponent('Play')
         self.play_btn.clicked.connect(self.play_action)
         
+        self.info_label = LabelComponent(16, '')
         # self.leaderboard_btn = ButtonComponent('Leaderboard')
         
         layout.addWidget(header_label, 0, 0, 1, 2)
@@ -37,6 +48,7 @@ class PlayerWidget(QtWidgets.QWidget):
         layout.addWidget(self.win_ratio_label, 4, 0, 1, 1)
         layout.addWidget(self.sign_out_btn, 6, 0, 1, 1)
         layout.addWidget(self.play_btn, 7, 0, 1, 1)
+        layout.addWidget(self.info_label, 8, 0, 1, 1)
 
         layout.setRowStretch(0, 1)
         layout.setRowStretch(1, 1)
@@ -70,27 +82,53 @@ class PlayerWidget(QtWidgets.QWidget):
     def set_info(self, info, color='black'):
         self.info_label.setText(info)
         self.info_label.setStyleSheet('color: {}'.format(color))
-                
-    def clear_name_editor_content(self, event):
-        self.name_editor.clear()
-        self.info_label.clear()
 
-    def clear_password_editor_content(self, event):
-        self.password_editor.clear()
-
+    def update_waiting_match_time(self):
+        self.wait_time += 1
+        self.set_info('Wait time: {}'.format(self.wait_time))
+    
     def sign_out_action(self):
         self.update_widget_callback('menu')
     
-    def proces_signin_result(self, result):
+    def proces_play_result(self, result):
+        '''
+        response OK :
+            priority,
+            rival_info,
+        '''
         response = json.loads(result)
         if response['status'] == 'OK':
-            self.set_info(info='Sign In Success', color='green')
-            self.init()
-        else: 
-            self.set_info(info=response['reason'], color='red')
+            self.timer.stop()
+            priority = response['priority']
+            rival_name = response['rival_info']['name']
+            rival_address = response['rival_info']['address']
+            self.set_info(info='Match Success\n priority = {}\n rival = {}, {}'.format(priority, rival_name, rival_address), color='green')
+            self.play_btn.setText('Play')
+        
+    def proces_cancel_result(self, result):
+        response = json.loads(result)
+        if response['status'] == 'OK':
+            self.timer.stop()
+            self.play_btn.setText('Play')
+            self.set_info('Cancel Matching Success',color='green')
 
     def play_action(self):
-        None
+        if(self.play_btn.text()=='Play'):
+            name = self.player_info['name']
+            self.send_command = ExecuteCommand(self.client, 'play', {'name': name})
+            self.send_command.start()
+            self.send_command.return_sig.connect(self.proces_play_result)
+            self.play_btn.setText('Cancel')
+            self.wait_time = 0
+            self.timer = RepeatingTimer(1.0, self.update_waiting_match_time)
+            self.timer.start()
+        else:
 
+            name = self.player_info['name']
+            cancel_lock.acquire()
+            self.send_command = ExecuteCommand(cancel_client, 'cancel', {'name': name})
+            self.send_command.start()
+            self.send_command.return_sig.connect(self.proces_cancel_result)
+            cancel_lock.release()
 
   
