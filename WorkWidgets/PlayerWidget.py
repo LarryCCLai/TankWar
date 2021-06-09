@@ -17,7 +17,8 @@ class PlayerWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
         super().__init__()
         layout = QtWidgets.QGridLayout()
-        
+        self.game_client = None
+        self.game_server = None
         self.client = client
         self.update_widget_callback = update_widget_callback
         self.player_info = None
@@ -100,10 +101,14 @@ class PlayerWidget(QtWidgets.QWidget):
         if response['status'] == 'OK':
             self.timer.stop()
             priority = response['priority']
-            rival_name = response['rival_info']['name']
-            rival_address = response['rival_info']['address']
+            rival_info = response['rival_info']
+            rival_name = rival_info['name']
+            rival_address = rival_info['address']
             self.set_info(info='Match Success\n priority = {}\n rival = {}, {}'.format(priority, rival_name, rival_address), color='green')
             self.play_btn.setText('Play')
+            self.update_widget_callback('game', self.player_info, rival_info, priority)
+
+            
         
     def proces_cancel_result(self, result):
         response = json.loads(result)

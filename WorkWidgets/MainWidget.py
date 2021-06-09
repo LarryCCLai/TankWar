@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from WorkWidgets.SignUpWidget import SignUpWidget
 from WorkWidgets.SignInWidget import SignInWidget
 from WorkWidgets.PlayerWidget import PlayerWidget
+from WorkWidgets.GameWidget import GameWidget
 from WorkWidgetComponents import LabelComponent
 from WorkWidgetComponents import ButtonComponent
 import socket
@@ -22,8 +23,8 @@ class MainWidget(QtWidgets.QWidget):
         
         
         layout.addWidget(header_label, stretch=1)
-        layout.addWidget(ip_label, stretch=2)
-        layout.addWidget(function_widget, stretch=9)
+        layout.addWidget(ip_label, stretch=1)
+        layout.addWidget(function_widget, stretch=10)
 
         # layout.setRowStretch(0, 1)
         # layout.setRowStretch(1, 9)
@@ -61,6 +62,7 @@ class MenuWidget(QtWidgets.QWidget):
 
     def init(self):
         None
+
 class FunctionWidget(QtWidgets.QStackedWidget):
     def __init__(self, client):
         self.client = client
@@ -69,15 +71,18 @@ class FunctionWidget(QtWidgets.QStackedWidget):
             "menu": self.addWidget(MenuWidget(self.update_widget)),
             "sign_up": self.addWidget(SignUpWidget(self.client, self.update_widget)),
             "sign_in": self.addWidget(SignInWidget(self.client, self.update_widget)),
-            "player": self.addWidget(PlayerWidget(self.client, self.update_widget))
+            "player": self.addWidget(PlayerWidget(self.client, self.update_widget)),
+            "game": self.addWidget(GameWidget(self.client, self.update_widget))
         }
         self.update_widget("menu")
     
-    def update_widget(self, name, player_info=None):
+    def update_widget(self, name, player_info=None, rival_info=None, priority=None):
         self.setCurrentIndex(self.widget_dict[name])
         current_widget = self.currentWidget()
         if(name =='player'):
             current_widget.init(player_info)
+        elif(name =='game'):
+            current_widget.init(player_info, rival_info, priority)
         else:
             current_widget.init()
         current_widget.load()

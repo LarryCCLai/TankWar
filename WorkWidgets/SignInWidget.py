@@ -65,6 +65,8 @@ class SignInWidget(QtWidgets.QWidget):
     def init(self):
         self.name_editor.setText('')
         self.password_editor.setText('')
+        self.name_editor.setText('T1') #test
+        self.password_editor.setText('12345') #test
         self.set_info('')
 
     def set_info(self, info, color='black'):

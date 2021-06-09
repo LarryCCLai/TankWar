@@ -15,7 +15,7 @@ client = SocketClient(host, port)
 
 app = QApplication([])
 main_window = MainWidget(client)
-main_window.setFixedSize(1040, 780)
+main_window.setFixedSize(1080, 864)
 main_window.show()
 
 # main_window.showFullScreen()
