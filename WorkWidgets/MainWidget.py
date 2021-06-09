@@ -4,6 +4,7 @@ from WorkWidgets.SignInWidget import SignInWidget
 from WorkWidgets.PlayerWidget import PlayerWidget
 from WorkWidgetComponents import LabelComponent
 from WorkWidgetComponents import ButtonComponent
+import socket
 
 class MainWidget(QtWidgets.QWidget):
     def __init__(self, client):
@@ -14,11 +15,14 @@ class MainWidget(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
 
         header_label = LabelComponent(24, "Tank War Online")
+        ip_label = LabelComponent(14, 'Your local IP: ' + socket.gethostbyname(socket.gethostname()))
+        ip_label.setAlignment(QtCore.Qt.AlignRight)
         header_label.setAlignment(QtCore.Qt.AlignCenter)
         function_widget = FunctionWidget(client)
         
         
         layout.addWidget(header_label, stretch=1)
+        layout.addWidget(ip_label, stretch=2)
         layout.addWidget(function_widget, stretch=9)
 
         # layout.setRowStretch(0, 1)

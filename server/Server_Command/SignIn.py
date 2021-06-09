@@ -10,8 +10,6 @@ class SignIn:
         
         player = self.PlayerInfoTable().login_check(name, password)
         
-        print(player)
-        
         if(len(player) == 1): #identify checked
             player = player[0]
             player_info = {'name': player['name'], 'win':player['win'], 'loss':player['loss']}

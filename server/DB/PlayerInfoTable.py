@@ -19,6 +19,7 @@ class PlayerInfoTable:
             cursor = connection.cursor()
             cursor.execute(command)
             record_from_db = cursor.fetchall()
+            
         return [row for row in record_from_db]
 
     def login_check(self, name, password):
