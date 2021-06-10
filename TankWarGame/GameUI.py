@@ -7,16 +7,6 @@ from  TankWarGame.Scene.Home import Home
 from TankWarGame.Scene.Border import Border
 from  TankWarGame.Map.Map import Map
 
-
-'''
-0: player0
-1: player1
-2: tree
-3: brick wall
-4: iron wall
-5: home
-6: none
-'''
 sence_dict = {
     2:Tree,
     3:BrickWall,

@@ -3,12 +3,7 @@ import sys
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QThread
-# print(front_info)
-#         print('tank:', self.tank_obj.cur_x, self.tank_obj.cur_y)
-#         print(left_dim)
-#         print(right_dim)
-#         print(self.game_info.map_dict[left_dim])
-#         print(self.game_info.map_dict[right_dim])
+
 class Bullet(QtWidgets.QPushButton):
     def __init__(self, game_ui, tank_obj):
         super().__init__(game_ui)
@@ -44,8 +39,8 @@ class Bullet(QtWidgets.QPushButton):
         return x, y
 
     def destroy_all(self, front_info):
-        left_dim = (front_info[1][0])//24, (front_info[1][1])//24
-        right_dim =(front_info[2][0])//24, (front_info[2][1])//24
+        left_dim = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
+        right_dim =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
         
         self.game_info.map_dict[left_dim] = self.game_info.none
         self.game_info.map_dict[right_dim] = self.game_info.none
@@ -55,13 +50,13 @@ class Bullet(QtWidgets.QPushButton):
         
 
     def destroy_left(self, front_info):
-        left_dim = (front_info[1][0])//24, (front_info[1][1])//24
+        left_dim = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
         self.game_info.map_dict[left_dim] = self.game_info.none
         self.game_info.static_objs[left_dim].setVisible(False)
         
 
     def destroy_right(self, front_info):
-        right_dim =(front_info[2][0])//24, (front_info[2][1])//24
+        right_dim =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
         self.game_info.map_dict[right_dim] = self.game_info.none
         self.game_info.static_objs[right_dim].setVisible(False)
         
@@ -158,26 +153,26 @@ class Bullet(QtWidgets.QPushButton):
         if (self.direction == 'down'): 
             left_dim = (self.x-18, self.y + self.speed)
             right_dim = (self.x+6, self.y + self.speed)
-            lr_id = (self.game_info.map_dict.get(((self.x-18)//24, (self.y+self.speed)//24), self.game_info.none), 
-                    self.game_info.map_dict.get(((self.x+6)//24, (self.y + self.speed)//24), self.game_info.none))
+            lr_id = (self.game_info.map_dict.get(((self.x-18)//self.game_info.bsize, (self.y+self.speed)//self.game_info.bsize), self.game_info.none), 
+                    self.game_info.map_dict.get(((self.x+6)//self.game_info.bsize, (self.y + self.speed)//self.game_info.bsize), self.game_info.none))
             
         elif (self.direction == 'up'): 
             left_dim = (self.x-18, self.y - self.speed)
             right_dim = (self.x +6, self.y -self.speed)
-            lr_id = (self.game_info.map_dict.get(((self.x-18)//24, (self.y - self.speed)//24), self.game_info.none), 
-                    self.game_info.map_dict.get(((self.x+6)//24, (self.y -self.speed)//24), self.game_info.none))
+            lr_id = (self.game_info.map_dict.get(((self.x-18)//self.game_info.bsize, (self.y - self.speed)//self.game_info.bsize), self.game_info.none), 
+                    self.game_info.map_dict.get(((self.x+6)//self.game_info.bsize, (self.y -self.speed)//self.game_info.bsize), self.game_info.none))
 
         elif (self.direction == 'right'):  
             left_dim = (self.x + self.speed, self.y-18)
             right_dim = (self.x + self.speed, self.y+6)
-            lr_id = (self.game_info.map_dict.get(((self.x +self.speed)//24, (self.y -18)//24), self.game_info.none), 
-                    self.game_info.map_dict.get(((self.x +self.speed)//24, (self.y+6)//24), self.game_info.none))
+            lr_id = (self.game_info.map_dict.get(((self.x +self.speed)//self.game_info.bsize, (self.y -18)//self.game_info.bsize), self.game_info.none), 
+                    self.game_info.map_dict.get(((self.x +self.speed)//self.game_info.bsize, (self.y+6)//self.game_info.bsize), self.game_info.none))
 
         elif (self.direction == 'left'):  
             left_dim = (self.x-self.speed,self.y-18)
             right_dim = (self.x-self.speed,self.y+6)
-            lr_id = (self.game_info.map_dict.get(((self.x-self.speed)//24,(self.y-18)//24), self.game_info.none), 
-                    self.game_info.map_dict.get(((self.x-self.speed)//24,(self.y+6)//24), self.game_info.none))
+            lr_id = (self.game_info.map_dict.get(((self.x-self.speed)//self.game_info.bsize,(self.y-18)//self.game_info.bsize), self.game_info.none), 
+                    self.game_info.map_dict.get(((self.x-self.speed)//self.game_info.bsize,(self.y+6)//self.game_info.bsize), self.game_info.none))
         return (lr_id, left_dim, right_dim)
 
     def dead(self):

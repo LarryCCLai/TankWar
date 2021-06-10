@@ -6,9 +6,6 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QThread
 from TankWarGame.Tank.Bullet import Bullet
 from TankWarGame.Tank.BulletWorker import BulletWorker
-# from Bullet import bullet
-# from Global import quan_var
-# from Worker import work_bullet
 
 class Tank(QtWidgets.QPushButton):
     def __init__(self, game_ui, x, y, id, direction):
@@ -35,12 +32,12 @@ class Tank(QtWidgets.QPushButton):
         self.direction = direction
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/tank/tank%s_%s.png);}' % (self.id, direction))
     
-    def clear_position(self, flag = 7):
+    def clear_position(self):
         self.lock.acquire(timeout=0.02)
-        self.game_info.map_dict[(self.cur_x, self.cur_y)] = flag
-        self.game_info.map_dict[(self.cur_x+1, self.cur_y)] = flag
-        self.game_info.map_dict[(self.cur_x, self.cur_y+1)] = flag
-        self.game_info.map_dict[(self.cur_x+1, self.cur_y+1)] = flag
+        self.game_info.map_dict[(self.cur_x, self.cur_y)] = self.game_info.none
+        self.game_info.map_dict[(self.cur_x+1, self.cur_y)] = self.game_info.none
+        self.game_info.map_dict[(self.cur_x, self.cur_y+1)] = self.game_info.none
+        self.game_info.map_dict[(self.cur_x+1, self.cur_y+1)] = self.game_info.none
         self.lock.release()
 
     def move(self, direction):
@@ -48,9 +45,9 @@ class Tank(QtWidgets.QPushButton):
 
         obj_id = self.check_front(direction)
 
-        if ( (obj_id[0] == 7 or obj_id[0] == 2) and (obj_id[1] == 7 or obj_id[1] == 2)):
+        if ( (obj_id[0] == self.game_info.none or obj_id[0] == self.game_info.tree) and (obj_id[1] == self.game_info.none or obj_id[1] == self.game_info.tree)):
 
-            self.clear_position(flag = 7)  
+            self.clear_position()  
 
             if(direction=='left'):
                 self.cur_x -= self.tank_speed
@@ -63,8 +60,6 @@ class Tank(QtWidgets.QPushButton):
 
             self.setGeometry(self.cur_x*self.game_info.bsize, self.cur_y*self.game_info.bsize, self.game_info.bsize*2, self.game_info.bsize*2)
             self.update_map_dict(self.cur_x, self.cur_y)  
-            #  更新quan_var.mytank_dict列表
-            # self.flag_mytank()
 
     def check_front(self, direction):
         '''
@@ -101,7 +96,7 @@ class Tank(QtWidgets.QPushButton):
                 self.bullet_worker.done_singnal.connect(self.shoot_done)
                 self.bullet_worker.start()
             except Exception as e:
-                print(e,'发射子弹错误')
+                print(e,'shoot error')
 
     def shoot_done(self):
         self.game_info.bullet_life[self.id] = False

@@ -2,7 +2,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 
 
 class LabelComponent(QtWidgets.QLabel):
-    def __init__(self, font_size, content):
+    def __init__(self, font_size, content, color='black'):
         super().__init__()
 
         self.setWordWrap(True)

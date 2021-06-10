@@ -23,17 +23,9 @@ class GameInfo:
         self.static_objs = dict()  #key: dim
         self.tank_dict = dict()    #key: dim
 
-        self.main_obj = None
-        self.background = None
-
         self.bullet_life = {0:False, 1:False}
-
-        self.bullet_type_dict = {}
-        self.laoying = None   #  老鹰对象
         
-        self.food_obj = None  #  食物对象
-        #  我方坦克子弹线程标志位，False表示为线程不在运行
-        self.frame_one = None   
+        self.food_obj = None  
         
         pygame.init()
         pygame.mixer.init()

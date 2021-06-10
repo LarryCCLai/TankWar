@@ -4,7 +4,6 @@ from WorkWidgets.GameSend import GameSend
 from WorkWidgets.GameReceive import GameReceive 
 import json
 from client.SocketClient import SocketClient
-
 from TankWarGame.GameInfo import GameInfo
 from TankWarGame.Background import Background
 from TankWarGame.GameUI import GameUI
@@ -15,6 +14,7 @@ from  TankWarGame.Map.Map import Map
 class GameWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
         super().__init__()
+        self.setObjectName('game_widget')
         self.client = client
         self.update_widget_callback = update_widget_callback
         self.gmae_info = GameInfo()
@@ -22,9 +22,9 @@ class GameWidget(QtWidgets.QWidget):
         self.player_info = {0: None, 1: None}
         self.priority = None
         self.receive = None
+        
         self.show_ui()
-        self.setObjectName('sign_up_widget')
-
+        
         # self.init()
     
     def load(self):
@@ -36,6 +36,8 @@ class GameWidget(QtWidgets.QWidget):
         self.priority = priority
         print(self.player_info[0])
         print(self.player_info[1])
+        self.stat_ui.update_name(0, self.player_info[0]['name'])
+        self.stat_ui.update_name(1, self.player_info[1]['name'])
         if(self.priority == 0):
             self.game_client = SocketClient(self.client.host, self.player_info[1]['port'])
         else:
@@ -50,13 +52,9 @@ class GameWidget(QtWidgets.QWidget):
         self.resize(1080, 672)
         self.gmae_info.map_dict = Map(self.gmae_info.game_ui_width, self.gmae_info.game_ui_height, self.gmae_info.bsize).read_map()
         self.background = Background(self, self.gmae_info)
-        self.gmae_info.main_obj = self
-        self.gmae_info.background = self.background
         self.game_ui = GameUI(self.background, self.gmae_info)
-        self.stat_ui = StatUI(self)
+        self.stat_ui = StatUI(self, self.gmae_info)
         
-
-
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'right'})
