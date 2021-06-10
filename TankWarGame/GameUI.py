@@ -26,19 +26,19 @@ class GameUI(QtWidgets.QFrame):
 
     def generate_scene(self):
         isfirst = {0:True, 1:True}
-        for dim in self.game_info.map_dict:
-            if(self.game_info.map_dict[dim] == self.game_info.none ):
+        for coord in self.game_info.map_dict:
+            if(self.game_info.map_dict[coord] == self.game_info.none ):
                 continue
-            if(self.game_info.map_dict[dim] == self.game_info.tree):
-                self.game_info.static_objs[dim].setGeometry(dim[0]*self.game_info.bsize,dim[1]*self.game_info.bsize,self.game_info.bsize,self.game_info.bsize)
-# or self.game_info.map_dict[dim] == self.game_info.tree
-            if(self.game_info.map_dict[dim] == self.game_info.tank0 and isfirst[0]):
-                self.tank[0] = Tank(self, dim[0], dim[1], 0, 'right')
+            if(self.game_info.map_dict[coord] == self.game_info.tree):
+                self.game_info.static_objs[coord].setGeometry(coord[0]*self.game_info.bsize,coord[1]*self.game_info.bsize,self.game_info.bsize,self.game_info.bsize)
+                
+            if(self.game_info.map_dict[coord] == self.game_info.tank0 and isfirst[0]):
+                self.tank[0] = Tank(self, coord[0], coord[1], 0, 'right')
                 isfirst[0] = False
 
-            elif(self.game_info.map_dict[dim] == self.game_info.tank1 and isfirst[1]):
-                self.tank[1] = Tank(self, dim[0], dim[1], 1, 'left')
+            elif(self.game_info.map_dict[coord] == self.game_info.tank1 and isfirst[1]):
+                self.tank[1] = Tank(self, coord[0], coord[1], 1, 'left')
                 isfirst[1] = False
 
-            elif(self.game_info.map_dict[dim] != self.game_info.tank0 and self.game_info.map_dict[dim] != self.game_info.tank1):
-                self.game_info.static_objs[dim] = sence_dict[self.game_info.map_dict[dim]](self, dim[0], dim[1])
+            elif(self.game_info.map_dict[coord] != self.game_info.tank0 and self.game_info.map_dict[coord] != self.game_info.tank1):
+                self.game_info.static_objs[coord] = sence_dict[self.game_info.map_dict[coord]](self, coord[0], coord[1])

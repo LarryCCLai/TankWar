@@ -13,7 +13,7 @@ class Bullet(QtWidgets.QPushButton):
         self.game_ui = game_ui
         self.game_info = game_ui.game_info                   
         self.life = True                     
-        self.speed = 12
+        self.speed = self.game_info.bullet_speed
 
         self.x, self.y = self.xy_(self.tank_obj.cur_x,self.tank_obj.cur_y)                           
         self.setGeometry(self.x, self.y, 12, 12)
@@ -40,30 +40,30 @@ class Bullet(QtWidgets.QPushButton):
         return x, y
 
     def destroy_all(self, front_info):
-        left_dim = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
-        right_dim =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
+        left_coord = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
+        right_coord =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
         
-        self.game_info.map_dict[left_dim] = self.game_info.none
-        self.game_info.map_dict[right_dim] = self.game_info.none
+        self.game_info.map_dict[left_coord] = self.game_info.none
+        self.game_info.map_dict[right_coord] = self.game_info.none
 
-        self.game_info.static_objs[left_dim].setVisible(False)
-        self.game_info.static_objs[right_dim].setVisible(False)
+        self.game_info.static_objs[left_coord].setVisible(False)
+        self.game_info.static_objs[right_coord].setVisible(False)
         
 
     def destroy_left(self, front_info):
-        left_dim = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
-        self.game_info.map_dict[left_dim] = self.game_info.none
-        self.game_info.static_objs[left_dim].setVisible(False)
+        left_coord = (front_info[1][0])//self.game_info.bsize, (front_info[1][1])//self.game_info.bsize
+        self.game_info.map_dict[left_coord] = self.game_info.none
+        self.game_info.static_objs[left_coord].setVisible(False)
         
 
     def destroy_right(self, front_info):
-        right_dim =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
-        self.game_info.map_dict[right_dim] = self.game_info.none
-        self.game_info.static_objs[right_dim].setVisible(False)
+        right_coord =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
+        self.game_info.map_dict[right_coord] = self.game_info.none
+        self.game_info.static_objs[right_coord].setVisible(False)
     
     def move(self):
         '''
-        front_info = ((front left id, front right id), front left dim, front right dim)
+        front_info = ((front left id, front right id), front left coord, front right coord)
         '''
         front_info = self.check_front()
         elementR = front_info[0][1]
@@ -90,35 +90,35 @@ class Bullet(QtWidgets.QPushButton):
 
     def check_front(self):
         '''
-            ((front left id, front right id), front left dim, front right dim)
+            ((front left id, front right id), front left coord, front right coord)
         '''
-        left_dim = None
-        right_dim = None
+        left_coord = None
+        right_coord = None
         lr_id = None
         if (self.direction == 'down'): 
-            left_dim = (self.x-18, self.y + self.speed)
-            right_dim = (self.x+6, self.y + self.speed)
+            left_coord = (self.x-18, self.y + self.speed)
+            right_coord = (self.x+6, self.y + self.speed)
             lr_id = (self.game_info.map_dict.get(((self.x-18)//self.game_info.bsize, (self.y+self.speed)//self.game_info.bsize), self.game_info.none), 
                     self.game_info.map_dict.get(((self.x+6)//self.game_info.bsize, (self.y + self.speed)//self.game_info.bsize), self.game_info.none))
             
         elif (self.direction == 'up'): 
-            left_dim = (self.x-18, self.y - self.speed)
-            right_dim = (self.x +6, self.y -self.speed)
+            left_coord = (self.x-18, self.y - self.speed)
+            right_coord = (self.x +6, self.y -self.speed)
             lr_id = (self.game_info.map_dict.get(((self.x-18)//self.game_info.bsize, (self.y - self.speed)//self.game_info.bsize), self.game_info.none), 
                     self.game_info.map_dict.get(((self.x+6)//self.game_info.bsize, (self.y -self.speed)//self.game_info.bsize), self.game_info.none))
 
         elif (self.direction == 'right'):  
-            left_dim = (self.x + self.speed, self.y-18)
-            right_dim = (self.x + self.speed, self.y+6)
+            left_coord = (self.x + self.speed, self.y-18)
+            right_coord = (self.x + self.speed, self.y+6)
             lr_id = (self.game_info.map_dict.get(((self.x +self.speed)//self.game_info.bsize, (self.y -18)//self.game_info.bsize), self.game_info.none), 
                     self.game_info.map_dict.get(((self.x +self.speed)//self.game_info.bsize, (self.y+6)//self.game_info.bsize), self.game_info.none))
 
         elif (self.direction == 'left'):  
-            left_dim = (self.x-self.speed,self.y-18)
-            right_dim = (self.x-self.speed,self.y+6)
+            left_coord = (self.x-self.speed,self.y-18)
+            right_coord = (self.x-self.speed,self.y+6)
             lr_id = (self.game_info.map_dict.get(((self.x-self.speed)//self.game_info.bsize,(self.y-18)//self.game_info.bsize), self.game_info.none), 
                     self.game_info.map_dict.get(((self.x-self.speed)//self.game_info.bsize,(self.y+6)//self.game_info.bsize), self.game_info.none))
-        return (lr_id, left_dim, right_dim)
+        return (lr_id, left_coord, right_coord)
 
     def dead(self):
         self.game_info.bullet_music.play()

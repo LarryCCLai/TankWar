@@ -14,17 +14,17 @@ from  TankWarGame.Map.Map import Map
 class GameWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
         super().__init__()
-        self.setObjectName('game_widget')
+        
         self.client = client
         self.update_widget_callback = update_widget_callback
-        self.gmae_info = GameInfo()
+        self.game_info = None
         self.game_client = None
         self.player_info = {0: None, 1: None}
         self.priority = None
         self.receive = None
-        
+        self.game_info = GameInfo()
         self.show_ui()
-        
+        # self.show_ui()
         # self.init()
     
     def load(self):
@@ -36,6 +36,7 @@ class GameWidget(QtWidgets.QWidget):
         self.priority = priority
         print(self.player_info[0])
         print(self.player_info[1])
+        
         self.stat_ui.update_name(0, self.player_info[0]['name'])
         self.stat_ui.update_name(1, self.player_info[1]['name'])
         if(self.priority == 0):
@@ -49,11 +50,11 @@ class GameWidget(QtWidgets.QWidget):
         self.setFocus() 
 
     def show_ui(self):
-        self.resize(1080, 672)
-        self.gmae_info.map_dict = Map(self.gmae_info.game_ui_width, self.gmae_info.game_ui_height, self.gmae_info.bsize).read_map()
-        self.background = Background(self, self.gmae_info)
-        self.game_ui = GameUI(self.background, self.gmae_info)
-        self.stat_ui = StatUI(self, self.gmae_info)
+        self.resize(self.game_info.ui_width, self.game_info.ui_height)
+        self.game_info.map_dict = Map(self.game_info.game_ui_width, self.game_info.game_ui_height, self.game_info.bsize).read_map()
+        self.background = Background(self, self.game_info)
+        self.game_ui = GameUI(self.background, self.game_info)
+        self.stat_ui = StatUI(self, self.game_info)
         
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:

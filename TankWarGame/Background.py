@@ -7,7 +7,7 @@ class Background(QtWidgets.QFrame):
         self.game_info = game_info
         self.setGeometry( 0,  0, game_info.game_ui_width, game_info.game_ui_height)
         self.setStyleSheet('QWidget{background-color:black;}') 
-        for dim in game_info.map_dict:
-            if(game_info.map_dict[dim] != game_info.tree):
+        for coord in game_info.map_dict:
+            if(game_info.map_dict[coord] != game_info.tree):
                 continue
-            game_info.static_objs[dim] = Tree(self, dim[0], dim[1])
+            game_info.static_objs[coord] = Tree(self, coord[0], coord[1])

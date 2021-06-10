@@ -18,11 +18,11 @@ class Tank(QtWidgets.QPushButton):
         self.game_ui = game_ui
         self.game_info = game_ui.game_info
         self.direction = direction    
-        self.life = 1000
-        self.attack = 5
-        self.defense = 2
-        self.tank_speed = 1
-        self.bullet_speed = 1
+        
+        self.HP = self.game_info.tank_hp
+        self.ATK = self.game_info.tank_atk
+        self.DEF = self.game_info.tank_def
+        self.speed = self.game_info.tank_speed
         self.lock = threading.Lock()
 
         self.change_direction(direction)
@@ -50,13 +50,13 @@ class Tank(QtWidgets.QPushButton):
             self.clear_position()  
 
             if(direction=='left'):
-                self.cur_x -= self.tank_speed
+                self.cur_x -= self.speed
             elif(direction == 'right'):
-                self.cur_x += self.tank_speed
+                self.cur_x += self.speed
             elif(direction == 'up'):
-                self.cur_y -= self.tank_speed
+                self.cur_y -= self.speed
             elif(direction=='down'):
-                self.cur_y += self.tank_speed    
+                self.cur_y += self.speed    
 
             self.setGeometry(self.cur_x*self.game_info.bsize, self.cur_y*self.game_info.bsize, self.game_info.bsize*2, self.game_info.bsize*2)
             self.update_map_dict(self.cur_x, self.cur_y)  

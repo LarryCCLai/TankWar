@@ -2,7 +2,7 @@ import pygame
 
 class GameInfo:
     def __init__(self):
-
+        
         self.tank0 = 0  
         self.tank1 = 1  
         self.tree = 2     
@@ -12,16 +12,32 @@ class GameInfo:
         self.border = 6  
         self.none = 7
 
+        self.ui_width = 1080
+        self.ui_height = 672
         self.game_ui_width = 864
         self.game_ui_height = 672
         self.stat_ui_width = 240
         self.stat_ui_height = 672
         self.bsize = 24
 
+        #used to initilize 
+        self.tank_hp = 100
+        self.tank_atk = 5
+        self.tank_def = 2
+        self.tank_speed = 1       # map unit
+        self.home_hp = 50
+        self.home_def = 3
+        self.bullet_speed = 12     #pixel
+
+        self.re_time = 2           #s
+
+        self.self_id = None
+        self.rival_id = None
+
         self.map_dict = None
 
-        self.static_objs = dict()  #key: dim
-        self.tank_dict = dict()    #key: dim
+        self.static_objs = dict()  #key: coord
+        self.tank_dict = dict()    #key: coord
 
         self.bullet_life = {0:False, 1:False}
         
