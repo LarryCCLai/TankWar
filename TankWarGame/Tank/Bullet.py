@@ -68,13 +68,14 @@ class Bullet(QtWidgets.QPushButton):
         front_info = self.check_front()
         elementR = front_info[0][1]
         elementL = front_info[0][0]
-        if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or elementL == self.game_info.home:
-            if elementL == self.game_info.brick_wall or elementL == self.game_info.home: 
-                self.destroy_left(front_info)
-            self.dead()
-        elif elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border or elementR == self.game_info.home:
-            if elementR == self.game_info.brick_wall or elementR == self.game_info.home: 
-                self.destroy_right(front_info)
+        if elementL == self.game_info.brick_wall and elementR == self.game_info.brick_wall:
+            self.destroy_all(front_info)
+        elif elementL == self.game_info.brick_wall or elementL == self.game_info.home: 
+            self.destroy_left(front_info)
+        elif elementR == self.game_info.brick_wall or elementR == self.game_info.home: 
+            self.destroy_right(front_info)
+        if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or elementL == self.game_info.home or \
+            elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border or elementR == self.game_info.home:
             self.dead()
         else:
             if(self.direction == 'left'):
