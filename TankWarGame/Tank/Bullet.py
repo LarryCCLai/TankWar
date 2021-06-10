@@ -1,3 +1,4 @@
+from TankWarGame.Scene.Tree import Tree
 import time
 import sys
 
@@ -59,78 +60,22 @@ class Bullet(QtWidgets.QPushButton):
         right_dim =(front_info[2][0])//self.game_info.bsize, (front_info[2][1])//self.game_info.bsize
         self.game_info.map_dict[right_dim] = self.game_info.none
         self.game_info.static_objs[right_dim].setVisible(False)
-        
-
+    
     def move(self):
         '''
         front_info = ((front left id, front right id), front left dim, front right dim)
         '''
         front_info = self.check_front()
-        if front_info[0] == (self.game_info.tank0, self.game_info.tank0):
-            self.dead()  
-            # TO-DO
-        elif front_info[0] == (self.game_info.tank1, self.game_info.tank1):
-            self.dead()  
-            # TO-DO
-        elif front_info[0] == (self.game_info.home, self.game_info.home):  
-            self.dead()   
-            # TO-DO 
-        elif front_info[0] == (self.game_info.brick_wall, self.game_info.home):  
-            self.destroy_left(front_info)
-            self.dead()   
-            # TO-DO  
-        elif front_info[0] == (self.game_info.home, self.game_info.brick_wall):  
-            self.destroy_right(front_info)
-            self.dead()  
-            # TO-DO 
-
-        elif front_info[0] == (self.game_info.border, self.game_info.border):
+        elementR = front_info[0][1]
+        elementL = front_info[0][0]
+        if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or elementL == self.game_info.home:
+            if elementL == self.game_info.brick_wall: 
+                self.destroy_left(front_info)
             self.dead()
-        elif ((front_info[0][0] == self.game_info.tank0 or front_info[0][0] == self.game_info.tank1) and 
-                front_info[0][1] != self.game_info.tank0 and front_info[0][1] != self.game_info.tank1 and 
-                front_info[0][1] != self.game_info.none):
-            self.destroy_left(front_info)
-            self.dead() 
-        elif ((front_info[0][1] == self.game_info.tank0 or front_info[0][1] == self.game_info.tank1) and 
-                front_info[0][0] != self.game_info.tank0 and front_info[0][0] != self.game_info.tank1 and
-                front_info[0][0] != self.game_info.none):
-            self.destroy_left(front_info)
+        elif elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border or elementR == self.game_info.home:
+            if elementR == self.game_info.brick_wall: 
+                self.destroy_right(front_info)
             self.dead()
-
-        elif front_info[0] == (self.game_info.brick_wall, self.game_info.brick_wall):
-            self.destroy_all(front_info)
-            self.dead()
-        elif front_info[0] == (self.game_info.brick_wall, self.game_info.none):  
-            self.destroy_left(front_info)
-            self.dead()     
-        elif front_info[0] == (self.game_info.none, self.game_info.brick_wall):  
-            self.destroy_right(front_info)
-            self.dead()
-        elif front_info[0] == (self.game_info.brick_wall, self.game_info.tree):  
-            self.destroy_left(front_info)
-            self.dead() 
-        elif front_info[0] == (self.game_info.tree, self.game_info.brick_wall):  
-            self.destroy_right(front_info)
-            self.dead() 
-        
-        elif front_info[0] == (self.game_info.iron_wall, self.game_info.iron_wall):
-            self.dead()
-        elif front_info[0] == (self.game_info.iron_wall, self.game_info.none):  
-            self.dead()    
-        elif front_info[0] == (self.game_info.none, self.game_info.iron_wall):  
-            self.dead()
-        elif front_info[0] == (self.game_info.iron_wall, self.game_info.tree):  
-            self.dead()
-        elif front_info[0] == (self.game_info.tree, self.game_info.iron_wall):      
-            self.dead()
-        
-        elif front_info[0] == (self.game_info.brick_wall, self.game_info.iron_wall):  
-            self.destroy_left(front_info)
-            self.dead()
-        elif front_info[0] == (self.game_info.iron_wall, self.game_info.brick_wall):  
-            self.destroy_right(front_info)
-            self.dead()
-        
         else:
             if(self.direction == 'left'):
                 self.x = self.x - self.speed        

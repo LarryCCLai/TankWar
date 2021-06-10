@@ -6,6 +6,7 @@ from WorkWidgets.GameWidget import GameWidget
 from WorkWidgetComponents import LabelComponent
 from WorkWidgetComponents import ButtonComponent
 import socket
+from requests import get
 
 class MainWidget(QtWidgets.QWidget):
     def __init__(self, client):
@@ -16,7 +17,7 @@ class MainWidget(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
 
         header_label = LabelComponent(24, "Tank War Online")
-        ip_label = LabelComponent(14, 'Your local IP: ' + socket.gethostbyname(socket.gethostname()))
+        ip_label = LabelComponent(14, 'Your local IP address is: {:14}\nYour public IP address is: {:14}'.format(socket.gethostbyname(socket.gethostname()), get('https://api.ipify.org').text))
         ip_label.setAlignment(QtCore.Qt.AlignRight)
         header_label.setAlignment(QtCore.Qt.AlignCenter)
         function_widget = FunctionWidget(client)
