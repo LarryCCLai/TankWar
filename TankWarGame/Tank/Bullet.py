@@ -69,11 +69,11 @@ class Bullet(QtWidgets.QPushButton):
         elementR = front_info[0][1]
         elementL = front_info[0][0]
         if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or elementL == self.game_info.home:
-            if elementL == self.game_info.brick_wall: 
+            if elementL == self.game_info.brick_wall or elementL == self.game_info.home: 
                 self.destroy_left(front_info)
             self.dead()
         elif elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border or elementR == self.game_info.home:
-            if elementR == self.game_info.brick_wall: 
+            if elementR == self.game_info.brick_wall or elementR == self.game_info.home: 
                 self.destroy_right(front_info)
             self.dead()
         else:
