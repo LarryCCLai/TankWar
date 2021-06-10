@@ -52,8 +52,8 @@ class GameWidget(QtWidgets.QWidget):
     def show_ui(self):
         self.resize(self.game_info.ui_width, self.game_info.ui_height)
         self.game_info.map_dict = Map(self.game_info.game_ui_width, self.game_info.game_ui_height, self.game_info.bsize).read_map()
-        self.background = Background(self, self.game_info)
-        self.game_ui = GameUI(self.background, self.game_info)
+        # self.background = Background(self, self.game_info)
+        self.game_ui = GameUI(self, self.game_info)
         self.stat_ui = StatUI(self, self.game_info)
         
     def keyPressEvent(self, e):

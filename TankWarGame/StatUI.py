@@ -26,12 +26,9 @@ class PlayerInfo(QtWidgets.QFrame):
         self.player_header = StatLabel(self, QtCore.QRect(10, 50, 200, 20), 'Player {} Info.'.format(id), 13 , color[id])
         self.name = StatLabel(self, QtCore.QRect(10, 75, 200, 20), 'Name: None', 13 , color[id])
         self.tank_header = StatLabel(self, QtCore.QRect(10, 100, 200, 20), 'Tank Info.', 13 , color[id])
-        self.tank_HP = StatLabel(self, QtCore.QRect(10, 125, 200, 20), 'HP: {}'.format(100), 13 , color[id])
-        self.tank_ATK = StatLabel(self, QtCore.QRect(10, 150, 200, 20), 'ATK: {}'.format(5), 13 , color[id])
-        self.tank_DEF = StatLabel(self, QtCore.QRect(10, 175, 200, 20), 'DEF: {}'.format(2), 13 , color[id])
-        self.Home_header = StatLabel(self, QtCore.QRect(10, 200, 200, 20), 'Home Info.', 13 , color[id])
-        self.Home_HP = StatLabel(self, QtCore.QRect(10, 225, 200, 20), 'HP: {}'.format(50), 13 , color[id])
-        self.Home_DEF = StatLabel(self, QtCore.QRect(10, 250, 200, 20), 'DEF: {}'.format(2), 13 , color[id])
+        self.tank_HP = StatLabel(self, QtCore.QRect(10, 125, 200, 20), 'HP: {}'.format(Form.gmae_info.tank_hp), 13 , color[id])
+        self.Home_header = StatLabel(self, QtCore.QRect(10, 150, 200, 20), 'Home Info.', 13 , color[id])
+        self.Home_HP = StatLabel(self, QtCore.QRect(10, 175, 200, 20), 'HP: {}'.format(Form.gmae_info.home_hp), 13 , color[id])
 
 class StatUI(QtWidgets.QFrame):
     def __init__(self, Form, game_info):

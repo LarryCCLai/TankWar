@@ -18,16 +18,15 @@ class Tank(QtWidgets.QPushButton):
         self.game_ui = game_ui
         self.game_info = game_ui.game_info
         self.direction = direction    
-        
         self.HP = self.game_info.tank_hp
         self.ATK = self.game_info.tank_atk
-        self.DEF = self.game_info.tank_def
         self.speed = self.game_info.tank_speed
         self.lock = threading.Lock()
 
         self.change_direction(direction)
         self.setGeometry(x*self.game_info.bsize, y*self.game_info.bsize, self.game_info.bsize*2, self.game_info.bsize*2)
-    
+        self.setEnabled(False)
+
     def change_direction(self, direction):
         self.direction = direction
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/tank/tank%s_%s.png);}' % (self.id, direction))
@@ -85,7 +84,6 @@ class Tank(QtWidgets.QPushButton):
         self.game_info.map_dict[(x, y + 1)] = self.id
         self.game_info.map_dict[(x + 1, y + 1)] = self.id
         self.lock.release()
-    
     
     def shoot(self): 
         if not self.game_info.bullet_life[self.id]:

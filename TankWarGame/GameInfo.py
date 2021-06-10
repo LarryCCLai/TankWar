@@ -22,11 +22,9 @@ class GameInfo:
 
         #used to initilize 
         self.tank_hp = 100
-        self.tank_atk = 5
-        self.tank_def = 2
+        self.tank_atk = 10
         self.tank_speed = 1       # map unit
-        self.home_hp = 50
-        self.home_def = 3
+        self.home_hp = 100
         self.bullet_speed = 12     #pixel
 
         self.re_time = 2           #s
@@ -37,8 +35,8 @@ class GameInfo:
         self.map_dict = None
 
         self.static_objs = dict()  #key: coord
-        self.tank_dict = dict()    #key: coord
-
+        self.tank_objs = None    #key: coord
+        self.home_objs = None
         self.bullet_life = {0:False, 1:False}
         
         self.food_obj = None  
