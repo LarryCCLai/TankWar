@@ -5,5 +5,5 @@ class Tree(QtWidgets.QPushButton):
         super().__init__(game_ui)
         self.setText('')
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/scene/tree.png)}')
-        self.setGeometry(x*game_ui.b_size, y*game_ui.b_size, game_ui.b_size, game_ui.b_size)
-        self.setEnabled(False)            
+        self.setGeometry(x*game_ui.game_info.bsize, y*game_ui.game_info.bsize, game_ui.game_info.bsize, game_ui.game_info.bsize)
+                    

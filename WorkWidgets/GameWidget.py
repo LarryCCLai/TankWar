@@ -4,16 +4,21 @@ from WorkWidgets.GameSend import GameSend
 from WorkWidgets.GameReceive import GameReceive 
 import json
 from client.SocketClient import SocketClient
+
+from TankWarGame.GameInfo import GameInfo
+from TankWarGame.Background import Background
 from TankWarGame.GameUI import GameUI
 from TankWarGame.StatUI import StatUI
 from TankWarGame.Tank.Tank import Tank
+from  TankWarGame.Map.Map import Map
 
 class GameWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
         super().__init__()
-        self.game_client = None
         self.client = client
         self.update_widget_callback = update_widget_callback
+        self.gmae_info = GameInfo()
+        self.game_client = None
         self.player_info = {0: None, 1: None}
         self.priority = None
         self.receive = None
@@ -43,8 +48,15 @@ class GameWidget(QtWidgets.QWidget):
 
     def show_ui(self):
         self.resize(1080, 672)
-        self.game_ui = GameUI(self)
+        self.gmae_info.map_dict = Map(self.gmae_info.game_ui_width, self.gmae_info.game_ui_height, self.gmae_info.bsize).read_map()
+        self.background = Background(self, self.gmae_info)
+        self.gmae_info.main_obj = self
+        self.gmae_info.background = self.background
+        self.game_ui = GameUI(self.background, self.gmae_info)
+        self.stat_ui = StatUI(self)
         
+
+
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'right'})
