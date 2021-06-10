@@ -5,4 +5,5 @@ class Home(QtWidgets.QPushButton):
         super().__init__(game_ui)
         self.setText('')
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/scene/home1.png);}')
-        self.setGeometry(x*game_ui.b_size, y*game_ui.b_size, game_ui.b_size, game_ui.b_size)               
+        self.setGeometry(x*game_ui.b_size, y*game_ui.b_size, game_ui.b_size, game_ui.b_size)            
+        self.setEnabled(False)   

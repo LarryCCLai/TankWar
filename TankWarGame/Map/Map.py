@@ -3,12 +3,8 @@ import random
 map_file = {0:'./TankWarGame/Map/map1.csv',
             1:'./TankWarGame/Map/map2.csv'}
 
-b_size = 24
-game_ui_width = 840
-game_ui_height = 672
-
 class Map:
-    def __init__(self):
+    def __init__(self, game_ui_width, game_ui_height, b_size):
         self.map_dict = dict()
         self.w_num = game_ui_width/b_size
         self.h_num = game_ui_height/b_size

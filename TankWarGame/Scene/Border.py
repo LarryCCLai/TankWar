@@ -6,3 +6,4 @@ class Border(QtWidgets.QPushButton):
         self.setText('')
         self.setStyleSheet("QPushButton{background-color:#808080}")
         self.setGeometry(x*game_ui.b_size, y*game_ui.b_size, game_ui.b_size, game_ui.b_size)            
+        self.setEnabled(False)

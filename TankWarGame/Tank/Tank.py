@@ -18,6 +18,7 @@ class Tank(QtWidgets.QPushButton):
         self.init_y = y
         self.cur_x = x        
         self.cur_y = y        
+        self.game_ui = game_ui
         self.direction = direction    
         self.life = 1000
         self.attack = 5
@@ -32,7 +33,63 @@ class Tank(QtWidgets.QPushButton):
     def change_direction(self, direction):
         self.direction = direction
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/tank/tank%s_%s.png);}' % (self.id, direction))
-            
+    
+    def clear_position(self, flag = 7):
+        self.lock.acquire(timeout=0.02)
+        self.game_ui.map_dict[(self.cur_x, self.cur_y)] = flag
+        self.game_ui.map_dict[(self.cur_x+1, self.cur_y)] = flag
+        self.game_ui.map_dict[(self.cur_x, self.cur_y+1)] = flag
+        self.game_ui.map_dict[(self.cur_x+1, self.cur_y+1)] = flag
+        self.lock.release()
+
+    def move(self, direction):
+        self.change_direction(direction)
+
+        obj_id = self.check_front(direction)
+
+        if ( (obj_id[0] == 7 or obj_id[0] == 2) and (obj_id[1] == 7 or obj_id[1] == 2)):
+
+            self.clear_position(flag = 7)  
+
+            if(direction=='left'):
+                self.cur_x -= self.tank_speed
+            elif(direction == 'right'):
+                self.cur_x += self.tank_speed
+            elif(direction == 'up'):
+                self.cur_y -= self.tank_speed
+            elif(direction=='down'):
+                self.cur_y += self.tank_speed    
+
+            self.setGeometry(self.cur_x*self.game_ui.b_size, self.cur_y*self.game_ui.b_size, self.game_ui.b_size*2, self.game_ui.b_size*2)
+            self.update_map_dict(self.cur_x, self.cur_y)  
+            #  更新quan_var.mytank_dict列表
+            # self.flag_mytank()
+
+    def check_front(self, direction):
+        '''
+        return (id, id)
+        '''
+        obj_id = (7, 7)
+        if(direction=='left'):
+            obj_id = (self.game_ui.map_dict[(self.cur_x-1, self.cur_y)], self.game_ui.map_dict[(self.cur_x-1, self.cur_y+1)])
+        elif(direction == 'right'):
+            obj_id = (self.game_ui.map_dict[(self.cur_x+2, self.cur_y)], self.game_ui.map_dict[(self.cur_x+2, self.cur_y+1)])
+        elif(direction == 'up'):            
+            obj_id = (self.game_ui.map_dict[(self.cur_x, self.cur_y-1)], self.game_ui.map_dict[(self.cur_x+1, self.cur_y-1)])
+        elif(direction=='down'):            
+            obj_id = (self.game_ui.map_dict[(self.cur_x, self.cur_y+2)], self.game_ui.map_dict[(self.cur_x+1, self.cur_y+2)])
+ 
+        return obj_id
+
+
+    def update_map_dict(self, x, y):  
+        self.lock.acquire(timeout=0.02)
+        self.game_ui.map_dict[(x, y)] = self.id
+        self.game_ui.map_dict[(x + 1, y)] = self.id
+        self.game_ui.map_dict[(x, y + 1)] = self.id
+        self.game_ui.map_dict[(x + 1, y + 1)] = self.id
+        self.lock.release()
+
     # def chusheng(self, frame):# 18*26
     #     self.frame = frame
     #     # 玩家控件
@@ -47,16 +104,7 @@ class Tank(QtWidgets.QPushButton):
     #     #  根据像素点 存放我方坦克对象
     #     self.flag_mytank()
 
-    # def update_map_dict(self, x, y):  # 更新map_dict中的我方坦克位置
-    #     #  给修改操作加锁，避免高并发出错
-    #     self.lock.acquire(timeout=0.02)
-    #     x-=1
-    #     y-=1
-    #     quan_var.map_dict[(x, y)] = self.flag
-    #     quan_var.map_dict[(x + 1, y)] = self.flag
-    #     quan_var.map_dict[(x, y + 1)] = self.flag
-    #     quan_var.map_dict[(x + 1, y + 1)] = self.flag
-    #     self.lock.release()
+   
 
     # # 更新mytank_dict字典中的我方坦克信息
     # def flag_mytank(self):
@@ -123,48 +171,7 @@ class Tank(QtWidgets.QPushButton):
     #         #  sys.exit(QApplication(sys.argv).exec_())
     #         sys.exit(0)
     # #  坦克移动函数
-    # def move(self, direction):
-    #     self.change_direction(direction)
-
-    #     qian_flag = self.is_qian()
-
-    #     if max(qian_flag) <= 1:
-    #         if max(qian_flag) == 0.1:  #  手雷
-    #             quan_var.add_food.play()
-    #             quan_var.food_obj.siwang()
-    #             mytank_obj_list = list(quan_var.mytank_dict.values())
-    #             for enytank in quan_var.life_list:
-    #                 if enytank not in mytank_obj_list:
-    #                     print('调用敌方坦克siwang')
-    #                     enytank.siwang()
-    #         elif max(qian_flag) == 0.2:  #  五角星
-    #             quan_var.food_obj.siwang()
-    #             quan_var.add_food.play()
-    #             self.bullet_type += 1
-    #             quan_var.bullet_type_dict[self] = self.bullet_type
-    #         elif max(qian_flag) == 0.3:  #  生命值
-    #             quan_var.add_food.play()
-    #             quan_var.food_obj.siwang()
-    #             self.life += 1
-    #             quan_var.mytank_life = self.life
-    #             self.get_life()
-    #         else:
-    #             pass
-
-    #         self.flag = 0
-    #         self.gengxin_map_dict(self.x//24, self.y//24)  #  清除之前map_dict上mytank的位置
-    #         #  运动之后的坐标（单位像素）
-    #         self.x = self.x+self.fangxiang[0] * quan_var.mytank_speed
-    #         self.y += self.fangxiang[1] * quan_var.mytank_speed
-    #         if quan_var.food_dict.get((self.x, self.y), 0):
-    #             quan_var.food_dict.get((self.x, self.y), 0).siwang()
-    #         #  改变其对应位置
-    #         self.tank_player.setGeometry(self.x, self.y, 48,48)
-    #         #  self.changSudu()
-    #         self.flag = 5
-    #         self.gengxin_map_dict(self.x//24, self.y//24)  #  更新map_dict   玩家一位置
-    #         #  更新quan_var.mytank_dict列表
-    #         self.flag_mytank()
+    
 
     # #  判断坦克能否往前  返回类型（标志数，标志数） 告诉move方法 坦克前面是什么
     # def is_qian(self, direction):

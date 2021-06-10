@@ -59,6 +59,7 @@ class GameMatcher():
             player = self.wait_list[1]
             self.port = self.find_port()
         else:
+            self.port = self.find_port()
             player = self.wait_list[0]
 
         player.params['port'] = self.port 

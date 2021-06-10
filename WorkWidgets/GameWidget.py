@@ -38,36 +38,45 @@ class GameWidget(QtWidgets.QWidget):
 
         self.receive = GameReceive(self.game_client)
         self.receive.start()
-        self.receive.return_sig.connect(self.check)
+        self.receive.return_sig.connect(self.synchronize)
         self.setFocus() 
 
     def show_ui(self):
         self.resize(1080, 672)
         self.game_ui = GameUI(self)
         
-    # def RecvCommand
-
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:
-            self.send_command = GameSend(self.game_client, 'right', {'priority': self.priority})
+            self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'right'})
             self.send_command.start()
-            # self.game_ui.tank[self.priority].move('right')
-        # elif e.key()==QtCore.Qt.Key_Up:
-            # self.game_ui.tank[self.priority].move('up')
-        # elif e.key()==QtCore.Qt.Key_Down:
-            # self.game_ui.tank[self.priority].move('down')
-        # elif e.key()==QtCore.Qt.Key_Left:
-            # self.game_ui.tank[self.priority].move('left')
-        # elif e.key()==QtCore.Qt.Key_Space:
-            # self.game_ui.tank[self.priority].shoot()
+            self.game_ui.tank[self.priority].move('right')
+        elif e.key()==QtCore.Qt.Key_Up:
+            self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'up'})
+            self.send_command.start()
+            self.game_ui.tank[self.priority].move('up')
+        elif e.key()==QtCore.Qt.Key_Down:
+            self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'down'})
+            self.send_command.start()
+            self.game_ui.tank[self.priority].move('down')
+        elif e.key()==QtCore.Qt.Key_Left:
+            self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'left'})
+            self.send_command.start()
+            self.game_ui.tank[self.priority].move('left')
+        elif e.key()==QtCore.Qt.Key_Space:
+            self.send_command = GameSend(self.game_client, 'shoot', {'priority': self.priority})
+            self.send_command.start()
+            self.game_ui.tank[self.priority].shoot()
 
-    def check(self, result):
+    def synchronize(self, result):
         response = json.loads(result)
         print(response)
-    # def center(self):
-    #     qr = self.frameGeometry()
-    #     cp = QtWidgets.QDesktopWidget().availableGeometry().center()
-    #     qr.moveCenter(cp)
-    #     self.move(qr.topLeft())
+        command = response['command']
+        priority = response['parameters']['priority']
+        if (command == 'move'):
+            direction = response['parameters']['direction']
+            self.game_ui.tank[priority].move(direction)
+        elif(command == 'shoot'):
+            self.game_ui.tank[priority].shoot()
+
 
     

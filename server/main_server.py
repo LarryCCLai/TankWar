@@ -6,7 +6,7 @@ from DB.DBInitializer import DBInitializer
 
 host = "127.0.0.1"
 port = 20001
-accept_num = 10
+accept_num = 30
 DBConnection.db_file_path = "../example.db"
 
 if __name__ == '__main__':

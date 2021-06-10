@@ -6,3 +6,4 @@ class IronWall(QtWidgets.QPushButton):
         self.setText('')
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/scene/iron.png)}')
         self.setGeometry(x*game_ui.b_size, y*game_ui.b_size, game_ui.b_size, game_ui.b_size)                 
+        self.setEnabled(False)

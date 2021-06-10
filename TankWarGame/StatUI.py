@@ -20,7 +20,7 @@ sence_dict = {
 class StatUI(QtWidgets.QFrame):
     def __init__(self, Form):
         super().__init__(Form)
-        self.setGeometry(QtCore.QRect(840, 0, 240, 672))
+        self.setGeometry(QtCore.QRect(864, 0, 240, 672))
         self.setStyleSheet("background-color:#808080") 
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setFrameShadow(QtWidgets.QFrame.Raised)
