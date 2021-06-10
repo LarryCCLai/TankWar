@@ -81,7 +81,7 @@ class FunctionWidget(QtWidgets.QStackedWidget):
         current_widget = self.currentWidget()
         if(name =='player'):
             current_widget.init(player_info)
-        elif(name =='game'):
+        elif(name == 'game'):
             current_widget.init(player_info, rival_info, priority)
         else:
             current_widget.init()

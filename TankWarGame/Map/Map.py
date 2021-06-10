@@ -1,7 +1,7 @@
 import csv
 import random
 map_file = {0:'./TankWarGame/Map/map1.csv',
-            }
+            1:'./TankWarGame/Map/map2.csv'}
 
 b_size = 24
 game_ui_width = 840
@@ -15,7 +15,7 @@ class Map:
 
     def read_map(self):
         # sel = random.randint(0, 1)
-        sel = 0
+        sel = 1
         y = 0
         with open(map_file[sel],'r',newline='') as f:
             rows = csv.reader(f)

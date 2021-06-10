@@ -1,10 +1,15 @@
 import threading
+from GameSocket import GameSocket
+
 class GameMatcher():
     def __init__(self):
         self.wait_list=[]
         self.can_match = False
         self.lock = threading.Lock()
         self.call_count = 0
+        self.playing_dict = dict()
+        self.port = 20002
+
     def push(self, player):
         self.lock.acquire()
 
@@ -33,7 +38,7 @@ class GameMatcher():
         del self.wait_list[0]
         del self.wait_list[0]
         self.call_count = 0
-        
+
     def cancel_match(self, name):
         ret = False
         self.lock.acquire()
@@ -49,13 +54,32 @@ class GameMatcher():
         self.lock.acquire()
         self.call_count += 1
         player = None
-        if(priority==0):
+        
+        if(priority == 0):
             player = self.wait_list[1]
+            self.port = self.find_port()
         else:
             player = self.wait_list[0]
+
+        player.params['port'] = self.port 
+
         if(self.call_count == 2):
+            self.open_game_socket()
             self.update()
+
         self.lock.release()
         return player
 
+    def find_port(self):
+        self.port = 20002
+        while(self.port in self.playing_dict):
+            self.port += 1
+        return self.port
     
+    def open_game_socket(self):
+        host = '127.0.0.1'
+        game_socket = GameSocket(host, self.port, 2)
+        game_socket.setDaemon(True)
+        game_socket.serve()
+        self.playing_dict[self.port] = {'players':(self.wait_list[0], self.wait_list[1]), 'socket': game_socket}
+        

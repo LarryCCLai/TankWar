@@ -1,8 +1,6 @@
 import socket 
 import json
 
-host = "127.0.0.1"
-port = 20001
 BUFFER_SIZE = 1940
 
 class SocketClient:

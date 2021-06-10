@@ -8,18 +8,14 @@ from threading import Timer
 import json
 from client.SocketClient import SocketClient
 
-host = "127.0.0.1"
-port = 20001
-cancel_lock = threading.Lock()
-cancel_client = SocketClient(host, port)
-
 class PlayerWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback):
         super().__init__()
         layout = QtWidgets.QGridLayout()
-        self.game_client = None
-        self.game_server = None
+        
         self.client = client
+        self.cancel_lock = threading.Lock()
+        self.cancel_client = SocketClient(client.host, client.port)
         self.update_widget_callback = update_widget_callback
         self.player_info = None
         self.timer = None
@@ -101,13 +97,16 @@ class PlayerWidget(QtWidgets.QWidget):
         if response['status'] == 'OK':
             self.timer.stop()
             priority = response['priority']
+            print(priority)
             rival_info = response['rival_info']
             rival_name = rival_info['name']
             rival_address = rival_info['address']
             self.set_info(info='Match Success\n priority = {}\n rival = {}, {}'.format(priority, rival_name, rival_address), color='green')
             self.play_btn.setText('Play')
-            self.update_widget_callback('game', self.player_info, rival_info, priority)
-
+            if(priority == 0):
+                self.update_widget_callback('game', self.player_info, rival_info, priority)
+            else:
+                self.update_widget_callback('game', rival_info, self.player_info, priority)
             
         
     def proces_cancel_result(self, result):
@@ -130,10 +129,10 @@ class PlayerWidget(QtWidgets.QWidget):
         else:
 
             name = self.player_info['name']
-            cancel_lock.acquire()
-            self.send_command = ExecuteCommand(cancel_client, 'cancel', {'name': name})
+            self.cancel_lock.acquire()
+            self.send_command = ExecuteCommand(self.cancel_client, 'cancel', {'name': name})
             self.send_command.start()
             self.send_command.return_sig.connect(self.proces_cancel_result)
-            cancel_lock.release()
+            self.cancel_lock.release()
 
   

@@ -12,7 +12,7 @@ class SignIn:
         
         if(len(player) == 1): #identify checked
             player = player[0]
-            player_info = {'name': player['name'], 'win':player['win'], 'loss':player['loss']}
+            player_info = {'name': player['name'], 'win':player['win'], 'loss':player['loss'], 'address':self.params['address']}
             response = {'status': 'OK', 'reason': 'Name and password match', 'player_info': player_info}
         else:
             response = {'status': 'Fail', 'reason': 'Please check your login info.'}  

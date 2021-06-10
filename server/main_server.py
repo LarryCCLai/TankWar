@@ -13,7 +13,6 @@ if __name__ == '__main__':
     
     DBInitializer().execute()
     
-
     server = SocketServer(host, port, accept_num)
     server.setDaemon(True)
     server.serve()

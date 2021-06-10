@@ -5,27 +5,45 @@ from  TankWarGame.Scene.BrickWall import BrickWall
 from  TankWarGame.Scene.Tree import Tree
 from  TankWarGame.Scene.Home import Home
 from  TankWarGame.Map.Map import Map
+from  TankWarGame.Tank.Tank import Tank
 
-b_size = 24
-game_ui_width = 840
-game_ui_height = 672
+
+'''
+0: player0
+1: player1
+2: tree
+3: brick wall
+4: iron wall
+5: home
+6: none
+'''
 
 sence_dict = {
-    1:Tree,
-    2:BrickWall,
-    3:IronWall,
-    4:Home,
+    2:Tree,
+    3:BrickWall,
+    4:IronWall,
+    5:Home,
+    6:Border,
 }
 
 class GameUI(QtWidgets.QFrame):
-    def __init__(self, widget):
-        super().__init__(widget)
-        self.setGeometry( 0,  0, game_ui_width, game_ui_height)
+    def __init__(self, Form):
+        super().__init__(Form)
+        self.b_size = 24
+        self.game_ui_width = 840
+        self.game_ui_height = 672
+        self.setGeometry( 0,  0, self.game_ui_width, self.game_ui_height)
         self.setStyleSheet('QWidget{background-color:black;}') 
         self.map_dict = Map().read_map()
+        self.static_objs = dict()
+        self.tank = {0:None, 1:None}
         self.generate_scene()
 
     def generate_scene(self):
         for dim in self.map_dict:
-            scene = sence_dict[self.map_dict[dim]](self)
-            scene.setGeometry(dim[0]*b_size, dim[1]*b_size, b_size, b_size)
+            if(self.map_dict[dim] == 0):
+                self.tank[0] = Tank(self, dim[0], dim[1], 0, 'right')
+            elif(self.map_dict[dim] == 1):
+                self.tank[1] = Tank(self, dim[0], dim[1], 1, 'left')
+            else:
+                self.static_objs[dim] = sence_dict[self.map_dict[dim]](self, dim[0], dim[1])
