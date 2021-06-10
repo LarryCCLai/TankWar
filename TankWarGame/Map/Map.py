@@ -11,7 +11,7 @@ class Map:
 
     def read_map(self):
         # sel = random.randint(0, 1)
-        sel = 1
+        sel = 0
         y = 0
         with open(map_file[sel],'r',newline='') as f:
             rows = csv.reader(f)
