@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import QThread
 from  TankWarGame.Tank.Tank import Tank
 from  TankWarGame.Scene.Tree import Tree
 from  TankWarGame.Scene.BrickWall import BrickWall
@@ -6,6 +7,8 @@ from  TankWarGame.Scene.IronWall import IronWall
 from  TankWarGame.Scene.Home import Home
 from TankWarGame.Scene.Border import Border
 from  TankWarGame.Map.Map import Map
+from TankWarGame.Scene.Bonus import Bonus
+from TankWarGame.Scene.BonusWorker import BonusWorker
 
 sence_dict = {
     2:Tree,
@@ -25,6 +28,8 @@ class GameUI(QtWidgets.QFrame):
         self.generate_home()
         self.generate_tank()
         self.generate_scene()
+        self.form = Form
+        self.bonus_init()
         self.game_info.tank_objs =self.tank
         self.game_info.home_objs =self.home
 
@@ -76,3 +81,14 @@ class GameUI(QtWidgets.QFrame):
                 self.game_info.map_dict[coord] == self.game_info.home):
                 continue
             self.game_info.static_objs[coord] = sence_dict[self.game_info.map_dict[coord]](self, coord[0], coord[1])
+    
+    def bonus_init(self):
+        self.bonus_obj = Bonus(self, self.form)
+        self.game_info.bonus_obj = self.bonus_obj
+        self.BW = BonusWorker()
+        self.thread_food = QThread()
+        self.BW.start_bonus.connect(self.bonus_obj.show_bonus)
+        self.BW.stop_bonus.connect(self.bonus_obj.dead)
+        self.BW.moveToThread(self.thread_food)
+        self.thread_food.started.connect(self.BW.run)
+        self.thread_food.start()

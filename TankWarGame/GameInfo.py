@@ -41,7 +41,8 @@ class GameInfo:
         self.home_objs = None
         self.bullet_life = {0:False, 1:False}
         
-        self.food_obj = None  
+        self.bonus_obj = None  
+        self.bonus_dict = dict()
         
         pygame.init()
         pygame.mixer.init()
