@@ -63,7 +63,7 @@ class Bonus(QtWidgets.QPushButton):
                 self.game_info.map_dict.get((self.x, self.y + 1), 0) and self.game_info.map_dict.get((self.x + 1, self.y + 1), 0)):
                 self.food_icon.setGeometry(x, y, 44, 44)
                 break
-        self.food_icon.setStyleSheet(r'QPushButton{border-image:url(./Image/bonus/food_%s.png)}'%self.random_bonus())
+        self.food_icon.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/food_%s.png)}'%self.random_bonus())
         self.update_flag()
         self.food_icon.setVisible(True)
         

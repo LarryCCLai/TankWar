@@ -25,10 +25,8 @@ class PlayerInfo(QtWidgets.QFrame):
         self.tank_icon = Icon(self, QtCore.QRect(10, 10, 36, 36), icon[id])
         self.player_header = StatLabel(self, QtCore.QRect(10, 50, 200, 20), 'Player {} Info.'.format(id), 13 , color[id])
         self.name = StatLabel(self, QtCore.QRect(10, 75, 200, 20), 'Name: None', 13 , color[id])
-        self.tank_header = StatLabel(self, QtCore.QRect(10, 100, 200, 20), 'Tank Info.', 13 , color[id])
-        self.tank_HP = StatLabel(self, QtCore.QRect(10, 125, 200, 20), 'HP: {}'.format(Form.gmae_info.tank_hp), 13 , color[id])
-        self.Home_header = StatLabel(self, QtCore.QRect(10, 150, 200, 20), 'Home Info.', 13 , color[id])
-        self.Home_HP = StatLabel(self, QtCore.QRect(10, 175, 200, 20), 'HP: {}'.format(Form.gmae_info.home_hp), 13 , color[id])
+        self.tank_HP = StatLabel(self, QtCore.QRect(10, 100, 200, 20), 'Tank HP: {}'.format(Form.gmae_info.tank_hp), 13 , color[id])
+        self.home_HP = StatLabel(self, QtCore.QRect(10, 125, 200, 20), 'Home HP: {}'.format(Form.gmae_info.home_hp), 13 , color[id])
 
 class StatUI(QtWidgets.QFrame):
     def __init__(self, Form, game_info):
@@ -38,9 +36,16 @@ class StatUI(QtWidgets.QFrame):
         self.setStyleSheet("background-color:#808080") 
         self.setObjectName("stat")
 
-        self.player0 = PlayerInfo(self, QtCore.QRect(0, 0, self.gmae_info.stat_ui_width, self.gmae_info.stat_ui_height/2), 0)
+        self.player0 = PlayerInfo(self, QtCore.QRect(0, 40, self.gmae_info.stat_ui_width, self.gmae_info.stat_ui_height/2), 0)
         self.player1 = PlayerInfo(self, QtCore.QRect(0, self.gmae_info.stat_ui_height/2, self.gmae_info.stat_ui_width, self.gmae_info.stat_ui_height/2), 1)
         self.players={0:self.player0, 1:self.player1}
+        self.gmae_info.stat_ui = self
 
     def update_name(self, id, name):
         self.players[id].name.setText('Name: {}'.format(name))
+    
+    def update_tank_hp(self, id, hp):
+        self.players[id].tank_HP.setText('HP: {}'.format(hp))
+    
+    def update_home_hp(self, id, hp):
+        self.players[id].home_HP.setText('HP: {}'.format(hp))

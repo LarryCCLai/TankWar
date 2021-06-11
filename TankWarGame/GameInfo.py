@@ -28,18 +28,17 @@ class GameInfo:
         self.bullet_speed = 12     #pixel
         self.bullet_level = 1     #1 or 2
 
-
-        self.re_time = 2           #s
-
-        self.self_id = None
-        self.rival_id = None
-
+        self.rebirth_time = 1           #s
+        
+        self.self_id = None     #not used 
+        self.rival_id = None    #not used
+        
+        self.stat_ui = None
         self.map_dict = None
 
         self.static_objs = dict()  #key: coord
         self.tank_objs = None    #key: coord
         self.home_objs = None
-        self.bullet_life = {0:False, 1:False}
         
         self.bonus_obj = None  
         self.bonus_dict = dict()

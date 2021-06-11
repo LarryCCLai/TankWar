@@ -1,7 +1,7 @@
 from TankWarGame.Scene.Tree import Tree
 import time
 import sys
-
+import threading
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QThread
 
@@ -89,8 +89,14 @@ class Bullet(QtWidgets.QPushButton):
                     self.dead()
                 else:
                     self.destroy_right(front_info)
-        elif elementL == self.game_info.tank0 or elementL == self.game_info.tank1 or elementR == self.game_info.tank0 or elementR== self.game_info.tank1 \
-            or elementL == self.game_info.home or elementR == self.game_info.home:
+        elif elementL == self.game_info.tank0 or elementR == self.game_info.tank0:
+            threading.Thread(target=self.game_info.tank_objs[self.game_info.tank0].beHit,args = (self.tank_obj.ATK,)).start()
+            self.dead()
+        elif elementL == self.game_info.tank1 or elementR== self.game_info.tank1:
+            threading.Thread(target=self.game_info.tank_objs[self.game_info.tank1].beHit,args = (self.tank_obj.ATK,)).start()
+            self.dead()
+        elif elementL == self.game_info.home or elementR == self.game_info.home:
+            
             #GameOver
             self.dead()
             print('GameOver')

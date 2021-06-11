@@ -11,5 +11,5 @@ class BulletWorker(QtCore.QThread):
     def run(self):
         while self.bullet.life:
             self.bullet.move()
-            time.sleep(0.05)
+            time.sleep(0.02)
         self.done_singnal.emit()
