@@ -14,6 +14,7 @@ class Bullet(QtWidgets.QPushButton):
         self.game_info = game_ui.game_info                   
         self.life = True                     
         self.speed = self.game_info.bullet_speed
+        self.level = self.game_info.bullet_level
 
         self.x, self.y = self.xy_(self.tank_obj.cur_x,self.tank_obj.cur_y)                           
         self.setGeometry(self.x, self.y, 12, 12)
@@ -70,10 +71,28 @@ class Bullet(QtWidgets.QPushButton):
         elementL = front_info[0][0]
         if elementL == self.game_info.brick_wall and elementR == self.game_info.brick_wall:
             self.destroy_all(front_info)
-        elif elementL == self.game_info.brick_wall or elementL == self.game_info.home: 
-            self.destroy_left(front_info)
-        elif elementR == self.game_info.brick_wall or elementR == self.game_info.home: 
-            self.destroy_right(front_info)
+        elif elementL == self.game_info.iron_wall and elementR == self.game_info.iron_wall and self.level == 2:
+            self.destroy_all(front_info)
+        elif elementL == self.game_info.brick_wall or elementL == self.game_info.home or elementL == self.game_info.iron_wall: 
+            if self.level == 2:
+                self.destroy_left(front_info)
+            else:
+                if elementL == self.game_info.iron_wall:
+                    self.dead()
+                else:
+                    self.destroy_left(front_info)
+        elif elementR == self.game_info.brick_wall or elementR == self.game_info.home or elementR == self.game_info.iron_wall: 
+            if self.level == 2:
+                self.destroy_right(front_info)
+            else:
+                if elementR == self.game_info.iron_wall:
+                    self.dead()
+                else:
+                    self.destroy_right(front_info)
+        elif elementL == self.game_info.tank0 or elementL == self.game_info.tank1 or elementR == self.game_info.tank0 or elementR== self.game_info.tank1:
+            #GameOver
+            self.dead()
+            pass
         if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or elementL == self.game_info.home or \
             elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border or elementR == self.game_info.home:
             self.dead()
@@ -126,6 +145,7 @@ class Bullet(QtWidgets.QPushButton):
         self.setGeometry(self.x - 18, self.y - 18, 48, 48)
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/others/boom_static.png)}')
         time.sleep(0.025)
+        self.setStyleSheet('')
         self.setVisible(False)
         QtWidgets.QApplication.processEvents()
         self.life = False

@@ -22,9 +22,9 @@ class GameUI(QtWidgets.QFrame):
         self.setStyleSheet('QWidget{background-color:black;}') 
         self.tank = {0:None, 1:None}
         self.home = {0:None, 1:None}
-        self.generate_scene()
         self.generate_home()
         self.generate_tank()
+        self.generate_scene()
         self.game_info.tank_objs =self.tank
         self.game_info.home_objs =self.home
 

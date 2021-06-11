@@ -26,6 +26,8 @@ class GameInfo:
         self.tank_speed = 1       # map unit
         self.home_hp = 100
         self.bullet_speed = 12     #pixel
+        self.bullet_level = 1     #1 or 2
+
 
         self.re_time = 2           #s
 
