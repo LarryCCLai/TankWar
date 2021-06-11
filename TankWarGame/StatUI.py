@@ -45,7 +45,7 @@ class StatUI(QtWidgets.QFrame):
         self.players[id].name.setText('Name: {}'.format(name))
     
     def update_tank_hp(self, id, hp):
-        self.players[id].tank_HP.setText('HP: {}'.format(hp))
+        self.players[id].tank_HP.setText('Tank HP: {}'.format(hp))
     
     def update_home_hp(self, id, hp):
-        self.players[id].home_HP.setText('HP: {}'.format(hp))
+        self.players[id].home_HP.setText('Home HP: {}'.format(hp))

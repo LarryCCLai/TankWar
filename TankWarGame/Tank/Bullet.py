@@ -96,10 +96,13 @@ class Bullet(QtWidgets.QPushButton):
             threading.Thread(target=self.game_info.tank_objs[self.game_info.tank1].beHit,args = (self.tank_obj.ATK,)).start()
             self.dead()
         elif elementL == self.game_info.home or elementR == self.game_info.home:
-            
+            if(self.tank_obj.id == self.game_info.tank0):
+                threading.Thread(target=self.game_info.home_objs[self.game_info.tank1].beHit,args = (self.game_info.tank1, self.tank_obj.ATK,)).start()
+            else:
+                threading.Thread(target=self.game_info.home_objs[self.game_info.tank0].beHit,args = (self.game_info.tank0, self.tank_obj.ATK,)).start()
             #GameOver
             self.dead()
-            print('GameOver')
+            # print('GameOver')
             pass
         if elementL == self.game_info.brick_wall  or elementL == self.game_info.iron_wall or elementL == self.game_info.border or \
             elementR == self.game_info.brick_wall  or elementR == self.game_info.iron_wall or elementR == self.game_info.border:
