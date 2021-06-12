@@ -3,6 +3,8 @@ from WorkWidgets.SignUpWidget import SignUpWidget
 from WorkWidgets.SignInWidget import SignInWidget
 from WorkWidgets.PlayerWidget import PlayerWidget
 from WorkWidgets.GameWidget import GameWidget
+from WorkWidgets.HelpWidget import HelpWidget
+from WorkWidgets.MenuWidget import MenuWidget
 from WorkWidgetComponents import LabelComponent
 from WorkWidgetComponents import ButtonComponent
 import socket
@@ -37,39 +39,13 @@ class MainWidget(QtWidgets.QWidget):
         layout = QtWidgets.QGridLayout()
         self.setLayout(layout)
 
-class MenuWidget(QtWidgets.QWidget):
-    def __init__(self, update_widget_callback):
-        super().__init__()
-        self.setObjectName("menu_widget")
-        self.update_widget_callback = update_widget_callback
-
-        layout = QtWidgets.QGridLayout()
-        menu_label = LabelComponent(18, "Menu")
-        sign_up_button = ButtonComponent("Sign Up")
-        sign_in_button = ButtonComponent("Sign In")        
-
-        sign_up_button.clicked.connect(lambda: self.update_widget_callback("sign_up"))
-        sign_in_button.clicked.connect(lambda: self.update_widget_callback("sign_in"))
-        layout.addWidget(menu_label, 0, 0, 1, 1)
-        layout.addWidget(sign_up_button, 1, 0, 1, 1)
-        layout.addWidget(sign_in_button, 2, 0, 1, 1)
-        layout.setRowStretch(0, 1)
-        layout.setRowStretch(1, 1)
-        layout.setRowStretch(2, 1)
-        layout.setRowStretch(3, 7)
-        self.setLayout(layout)
-    def load(self):
-        print("menu widget")
-
-    def init(self):
-        None
-
 class FunctionWidget(QtWidgets.QStackedWidget):
     def __init__(self, client):
         self.client = client
         super().__init__()
         self.widget_dict = {
             "menu": self.addWidget(MenuWidget(self.update_widget)),
+            "help": self.addWidget(HelpWidget(self.update_widget)),
             "sign_up": self.addWidget(SignUpWidget(self.client, self.update_widget)),
             "sign_in": self.addWidget(SignInWidget(self.client, self.update_widget)),
             "player": self.addWidget(PlayerWidget(self.client, self.update_widget)),

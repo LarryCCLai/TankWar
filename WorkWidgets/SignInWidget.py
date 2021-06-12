@@ -17,7 +17,7 @@ class SignInWidget(QtWidgets.QWidget):
         header_label = LabelComponent(20, 'Sign In')
 
         self.back_btn = ButtonComponent('Back')
-        self.back_btn.clicked.connect(self.back_action)
+        self.back_btn.clicked.connect(lambda: self.update_widget_callback("menu"))
 
         name_label = LabelComponent(16, 'Name ')
         self.name_editor = LineEditComponent('')
@@ -80,9 +80,6 @@ class SignInWidget(QtWidgets.QWidget):
     def clear_password_editor_content(self, event):
         self.password_editor.clear()
 
-    def back_action(self):
-        self.update_widget_callback('menu')
-    
     def proces_signin_result(self, result):
         response = json.loads(result)
         if response['status'] == 'OK':
