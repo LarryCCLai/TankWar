@@ -28,10 +28,9 @@ class GameUI(QtWidgets.QFrame):
         self.generate_home()
         self.generate_tank()
         self.generate_scene()
-        self.form = Form
         self.bonus_init()
-        self.game_info.tank_objs =self.tank
-        self.game_info.home_objs =self.home
+        self.game_info.tank_objs = self.tank
+        self.game_info.home_objs = self.home
 
     def generate_home(self):
         home_isfirst = {0:True, 1:True}
@@ -83,12 +82,12 @@ class GameUI(QtWidgets.QFrame):
             self.game_info.static_objs[coord] = sence_dict[self.game_info.map_dict[coord]](self, coord[0], coord[1])
     
     def bonus_init(self):
-        self.bonus_obj = Bonus(self, self.form)
+        self.bonus_obj = Bonus(self)
         self.game_info.bonus_obj = self.bonus_obj
         self.BW = BonusWorker()
-        self.thread_food = QThread()
-        self.BW.start_bonus.connect(self.bonus_obj.show_bonus)
+        self.thread_bonus = QThread()
+        self.BW.start_bonus.connect(self.bonus_obj.show)
         self.BW.stop_bonus.connect(self.bonus_obj.dead)
-        self.BW.moveToThread(self.thread_food)
-        self.thread_food.started.connect(self.BW.run)
-        self.thread_food.start()
+        self.BW.moveToThread(self.thread_bonus)
+        self.thread_bonus.started.connect(self.BW.run)
+        self.thread_bonus.start()

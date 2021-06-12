@@ -2,14 +2,14 @@ import pygame
 
 class GameInfo:
     def __init__(self):
-        
-        self.tank0 = 0  
-        self.tank1 = 1  
-        self.tree = 2     
-        self.brick_wall = 3    
-        self.iron_wall = 4     
-        self.home = 5    
-        self.border = 6  
+    
+        self.tank0 = 0
+        self.tank1 = 1
+        self.tree = 2
+        self.brick_wall = 3
+        self.iron_wall = 4
+        self.home = 5
+        self.border = 6
         self.none = 7
 
         self.ui_width = 1080
