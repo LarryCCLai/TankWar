@@ -20,6 +20,11 @@ class GameInfo:
         self.stat_ui_height = 672
         self.bsize = 24
 
+        self.coord_left_x = 0
+        self.coord_left_y = 0
+        self.coord_right_x = self.game_ui_width//self.bsize
+        self.coord_right_y = self.game_ui_height//self.bsize
+        
         #used to initilize 
         self.tank_hp = 100
         self.tank_atk = 10

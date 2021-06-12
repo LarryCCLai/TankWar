@@ -16,8 +16,8 @@ class Bonus(QtWidgets.QPushButton):
     
     def random_xy(self):
         random.seed(time.time())
-        self.x = random.randint(0, 25)
-        self.y = random.randint(0, 25)
+        self.x = random.randint(self.game_info.coord_left_x+1, self.game_info.coord_right_x-1)
+        self.y = random.randint(self.game_info.coord_left_y+1, self.game_info.coord_right_y-1)
 
     def random_bonus(self):
         bonus_list = ['tank', 'gun', 'iron', 'protect']
@@ -26,24 +26,10 @@ class Bonus(QtWidgets.QPushButton):
         return bonus
 
     def update_flag(self):
-        if self.game_info.map_dict.get((self.x, self.y), 0) <= 1:
-            self.game_info.map_dict[(self.x, self.y)] = self.bonus_type
-        if self.game_info.map_dict.get((self.x + 1, self.y), 0) <= 1:
-            self.game_info.map_dict[(self.x + 1, self.y)] = self.bonus_type
-        if self.game_info.map_dict.get((self.x, self.y + 1), 0) <= 1:
-            self.game_info.map_dict[(self.x, self.y + 1)] = self.bonus_type
-        if self.game_info.map_dict.get((self.x + 1, self.y + 1), 0) <= 1:
-            self.game_info.map_dict[(self.x + 1, self.y + 1)] = self.bonus_type
-
+        self.game_info.map_dict[(self.x, self.y)] = self.bonus_type
+        
     def clear_flag(self):
-        if self.game_info.map_dict.get((self.x, self.y), 0) < 1:
-            self.game_info.map_dict[(self.x, self.y)] = 0
-        if self.game_info.map_dict.get((self.x + 1, self.y), 0) < 1:
-            self.game_info.map_dict[(self.x + 1, self.y)] = 0
-        if self.game_info.map_dict.get((self.x, self.y + 1), 0) < 1:
-            self.game_info.map_dict[(self.x, self.y + 1)] = 0
-        if self.game_info.map_dict.get((self.x + 1, self.y + 1), 0) < 1:
-            self.game_info.map_dict[(self.x + 1, self.y + 1)] = 0
+        self.game_info.map_dict[(self.x, self.y)] = self.game_info.none
     
     # def set_bonus_range(self):
     #     self.game_info.bonus_dict = {}
@@ -56,10 +42,10 @@ class Bonus(QtWidgets.QPushButton):
         self.life = True
         while True:
             self.random_xy()
-            if not (self.game_info.map_dict.get((self.x, self.y), 0) and self.game_info.map_dict.get((self.x + 1, self.y), 0) and\
-            self.game_info.map_dict.get((self.x, self.y + 1), 0) and self.game_info.map_dict.get((self.x + 1, self.y + 1), 0)):
-                self.setGeometry(self.x, self.y, 32, 32)
-                break
+            if (self.game_info.map_dict[(self.x, self.y)] == self.game_info.none):
+                self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
+                break  
+
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())
         self.update_flag()
         self.setVisible(True)
