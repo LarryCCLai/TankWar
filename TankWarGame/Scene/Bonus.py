@@ -34,11 +34,13 @@ class Bonus(QtWidgets.QPushButton):
     def show(self):
         self.life = True
         while True:
-            self.random_xy()
-            if (self.game_info.map_dict[(self.x, self.y)] == self.game_info.none):
-                # self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 44, 44)
-                self.setGeometry(10*self.game_info.bsize, 10*self.game_info.bsize, 44, 44)
-                self.game_info.bonus_range = [10*self.game_info.bsize, 10*self.game_info.bsize] #44, 44
+            # self.random_xy()
+            self.x, self.y = 20, 20
+            if (self.game_info.map_dict[(self.x, self.y)] == self.game_info.none or \
+                self.game_info.map_dict[(self.x, self.y)] == self.game_info.tank0 or \
+                self.game_info.map_dict[(self.x, self.y)] == self.game_info.tank1):
+                self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
+                self.game_info.bonus_locate = [self.x*self.game_info.bsize, self.y*self.game_info.bsize]
                 break  
 
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())

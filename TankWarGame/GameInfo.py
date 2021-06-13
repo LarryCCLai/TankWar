@@ -47,7 +47,7 @@ class GameInfo:
         
         self.bonus_obj = None
         self.bonus_type = None
-        self.bonus_range = list()
+        self.bonus_locate = list()
         self.bonus_tank = 0.1
         
         pygame.init()
