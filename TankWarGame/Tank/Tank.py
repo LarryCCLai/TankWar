@@ -39,43 +39,22 @@ class Tank(QtWidgets.QPushButton):
         self.game_info.map_dict[(self.cur_x, self.cur_y+1)] = self.game_info.none
         self.game_info.map_dict[(self.cur_x+1, self.cur_y+1)] = self.game_info.none
         self.lock.release()
-
-    def is_in_poly(self, p1, p2):
-        poly = [p2, [p2[0]+self.game_info.bsize,p2[1]], [p2[0],p2[1]+self.game_info.bsize], [p2[0]+self.game_info.bsize,p2[1]+self.game_info.bsize]]
-        px, py = p1
-        is_in = False
-        for i, corner in enumerate(poly):
-            next_i = i + 1 if i + 1 < len(poly) else 0
-            x1, y1 = corner
-            x2, y2 = poly[next_i]
-            if (x1 == px and y1 == py) or (x2 == px and y2 == py):
-                is_in = True
-                break
-            if min(y1, y2) < py <= max(y1, y2):
-                x = x1 + (py - y1) * (x2 - x1) / (y2 - y1)
-                if x == px:
-                    is_in = True
-                    break
-                elif x > px:
-                    is_in = not is_in
-        return is_in
     
     def move(self, direction):
         if (self.dead_flag != True):
             
             self.change_direction(direction)
             obj_id = self.check_front(direction)
+            print(obj_id)
             print(f"[{24*self.cur_x}, {24*self.cur_y}]")
             print(self.game_info.bonus_locate)
 
-            if ( (obj_id[0] == self.game_info.none or obj_id[0] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank) \
-                and (obj_id[1] == self.game_info.none or obj_id[1] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank)):
-
+            if (self.game_info.none in obj_id or self.game_info.tree in obj_id or self.game_info.bonus_tank in obj_id or self.game_info.bonus_tank in obj_id):
                 self.clear_position()
                 
-                if self.is_in_poly([24*self.cur_x, 24*self.cur_y], self.game_info.bonus_locate):
-                        self.game_info.bonus_obj.dead()
-                        print('Got Bonus')
+                if self.game_info.bonus_tank in obj_id:
+                    self.game_info.bonus_obj.dead()
+                    print('Got Bonus')
 
                 if(direction=='left'):
                     self.cur_x -= self.speed

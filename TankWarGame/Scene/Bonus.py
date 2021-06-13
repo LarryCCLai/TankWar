@@ -36,9 +36,7 @@ class Bonus(QtWidgets.QPushButton):
         while True:
             # self.random_xy()
             self.x, self.y = 20, 20
-            if (self.game_info.map_dict[(self.x, self.y)] == self.game_info.none or \
-                self.game_info.map_dict[(self.x, self.y)] == self.game_info.tank0 or \
-                self.game_info.map_dict[(self.x, self.y)] == self.game_info.tank1):
+            if self.game_info.map_dict[(self.x, self.y)] == self.game_info.none:
                 self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
                 self.game_info.bonus_locate = [self.x*self.game_info.bsize, self.y*self.game_info.bsize]
                 break  
