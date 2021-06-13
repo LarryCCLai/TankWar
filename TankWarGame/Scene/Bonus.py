@@ -38,7 +38,6 @@ class Bonus(QtWidgets.QPushButton):
             self.x, self.y = 20, 20
             if self.game_info.map_dict[(self.x, self.y)] == self.game_info.none:
                 self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
-                self.game_info.bonus_locate = [self.x*self.game_info.bsize, self.y*self.game_info.bsize]
                 break  
 
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())

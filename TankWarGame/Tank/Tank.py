@@ -46,15 +46,15 @@ class Tank(QtWidgets.QPushButton):
             self.change_direction(direction)
             obj_id = self.check_front(direction)
             print(obj_id)
-            print(f"[{24*self.cur_x}, {24*self.cur_y}]")
-            print(self.game_info.bonus_locate)
 
-            if (self.game_info.none in obj_id or self.game_info.tree in obj_id or self.game_info.bonus_tank in obj_id or self.game_info.bonus_tank in obj_id):
+            if ( (obj_id[0] == self.game_info.none or obj_id[0] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank or obj_id[0] == self.game_info.bonus_tank) \
+                and (obj_id[1] == self.game_info.none or obj_id[1] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank or obj_id[1] == self.game_info.bonus_tank)):
+
                 self.clear_position()
                 
                 if self.game_info.bonus_tank in obj_id:
-                    self.game_info.bonus_obj.dead()
-                    print('Got Bonus')
+                        self.game_info.bonus_obj.dead()
+                        print('Got Bonus')
 
                 if(direction=='left'):
                     self.cur_x -= self.speed
