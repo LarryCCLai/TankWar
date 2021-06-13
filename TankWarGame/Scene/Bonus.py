@@ -20,30 +20,25 @@ class Bonus(QtWidgets.QPushButton):
         self.y = random.randint(self.game_info.coord_left_y+1, self.game_info.coord_right_y-1)
 
     def random_bonus(self):
-        bonus_list = ['tank', 'gun', 'iron', 'protect']
+        bonus_list = ['tank']
         bonus = random.choice(bonus_list)
         self.bonus_type = (bonus_list.index(bonus) + 1)/10
         return bonus
 
     def update_flag(self):
-        self.game_info.map_dict[(self.x, self.y)] = self.bonus_type
+        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_type = self.bonus_type
         
     def clear_flag(self):
-        self.game_info.map_dict[(self.x, self.y)] = self.game_info.none
-    
-    # def set_bonus_range(self):
-    #     self.game_info.bonus_dict = {}
-    #     self.game_info.bonus_dict[(self.x * 24 + 24, self.y * 24 + 24)] = self
-    #     self.game_info.bonus_dict[(self.x * 24 + 48, self.y * 24 + 24)] = self
-    #     self.game_info.bonus_dict[(self.x * 24 + 24, self.y * 24 + 48)] = self
-    #     self.game_info.bonus_dict[(self.x * 24 + 48, self.y * 24 + 48)] = self
+        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_type = self.game_info.none
         
     def show(self):
         self.life = True
         while True:
             self.random_xy()
             if (self.game_info.map_dict[(self.x, self.y)] == self.game_info.none):
-                self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
+                # self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 44, 44)
+                self.setGeometry(10*self.game_info.bsize, 10*self.game_info.bsize, 44, 44)
+                self.game_info.bonus_range = [10*self.game_info.bsize, 10*self.game_info.bsize] #44, 44
                 break  
 
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())

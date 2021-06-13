@@ -45,8 +45,10 @@ class GameInfo:
         self.tank_objs = None    #key: coord
         self.home_objs = None
         
-        self.bonus_obj = None  
-        self.bonus_dict = dict()
+        self.bonus_obj = None
+        self.bonus_type = None
+        self.bonus_range = list()
+        self.bonus_tank = 0.1
         
         pygame.init()
         pygame.mixer.init()

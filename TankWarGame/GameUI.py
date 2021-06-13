@@ -72,7 +72,6 @@ class GameUI(QtWidgets.QFrame):
             if(isfirst[0] == False and isfirst[1] == False):
                 break
     def generate_scene(self):
-        
         for coord in self.game_info.map_dict:
             if(self.game_info.map_dict[coord] == self.game_info.none or
                 self.game_info.map_dict[coord] == self.game_info.tank0 or 
