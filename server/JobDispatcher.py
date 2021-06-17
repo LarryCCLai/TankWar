@@ -3,6 +3,7 @@ from Server_Command.SignUp import SignUp
 from Server_Command.SignIn import SignIn
 from Server_Command.Play_Cancel import Play
 from Server_Command.Play_Cancel import Cancel
+from Server_Command.Update import Update
 from DB.PlayerInfoTable import PlayerInfoTable
 
 command_dict = {
@@ -11,6 +12,7 @@ command_dict = {
     'query': QueryPlayer,
     'play': Play,
     'cancel': Cancel,
+    'update': Update,
 }
 
 class JobDispatcher:

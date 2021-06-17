@@ -40,9 +40,8 @@ class PlayerInfoTable:
             cursor.execute(command)
             connection.commit()
 
-    def update_a_student(self, stu_id, name):
-        command = "UPDATE student_info SET name='{}' WHERE stu_id='{}';".format(name, stu_id)
-
+    def update_a_player(self, name, win_count, lose_count):
+        command = "UPDATE player_info SET win='{}', loss='{}' WHERE name='{}';".format(win_count, lose_count, name)
         with DBConnection() as connection:
             cursor = connection.cursor()
             cursor.execute(command)

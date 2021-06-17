@@ -11,6 +11,9 @@ class GameInfo:
         self.home = 5
         self.border = 6
         self.none = 7
+        self.game_over = False
+        self.loser = None
+        self.winner = None
 
         self.ui_width = 1080
         self.ui_height = 672
@@ -29,7 +32,7 @@ class GameInfo:
         self.tank_hp = 100
         self.tank_atk = 10
         self.tank_speed = 1       # map unit
-        self.home_hp = 100
+        self.home_hp = 10
         self.bullet_speed = 12     #pixel
         self.bullet_level = 1     #1 or 2
 

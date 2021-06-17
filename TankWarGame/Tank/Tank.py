@@ -41,7 +41,7 @@ class Tank(QtWidgets.QPushButton):
         self.lock.release()
     
     def move(self, direction):
-        if (self.dead_flag != True):
+        if (self.dead_flag != True and (self.game_info.game_over != True)):
             
             self.change_direction(direction)
             obj_id = self.check_front(direction)
@@ -94,7 +94,7 @@ class Tank(QtWidgets.QPushButton):
         self.lock.release()
 
     def shoot(self): 
-        if ((self.dead_flag != True) and (not self.bullet_life)):
+        if ((self.dead_flag != True) and (not self.bullet_life) and (self.game_info.game_over != True)):
             self.bullet_life = True
             self.bullet = Bullet(self.game_ui, self)
             try:

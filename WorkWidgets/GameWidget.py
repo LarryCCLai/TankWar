@@ -1,3 +1,4 @@
+from WorkWidgets.ExecuteCommand import ExecuteCommand
 from PyQt5 import QtWidgets, QtGui, QtCore
 from WorkWidgetComponents import LabelComponent, LineEditComponent, ButtonComponent
 from WorkWidgets.GameSend import GameSend
@@ -55,6 +56,7 @@ class GameWidget(QtWidgets.QWidget):
         # self.background = Background(self, self.game_info)
         self.game_ui = GameUI(self, self.game_info)
         self.stat_ui = StatUI(self, self.game_info)
+        self.stat_ui.close_button.clicked.connect(self.gameOverEvent)
         
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:
@@ -88,6 +90,14 @@ class GameWidget(QtWidgets.QWidget):
             self.game_ui.tank[priority].move(direction)
         elif(command == 'shoot'):
             self.game_ui.tank[priority].shoot()
-
-
+        elif(command == 'update'):
+            self.game_ui.tank[priority].update()
     
+    def gameOverEvent(self):
+        if(self.priority == self.game_info.winner):
+            self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'win'})
+        else:
+            self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
+        self.send_command.start()
+
+        self.update_widget_callback(QtWidgets.qApp.quit)

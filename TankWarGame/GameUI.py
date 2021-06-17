@@ -9,7 +9,6 @@ from TankWarGame.Scene.Border import Border
 from  TankWarGame.Map.Map import Map
 from TankWarGame.Scene.Bonus import Bonus
 from TankWarGame.Scene.BonusWorker import BonusWorker
-
 sence_dict = {
     2:Tree,
     3:BrickWall,
@@ -43,7 +42,6 @@ class GameUI(QtWidgets.QFrame):
                 self.game_info.static_objs[(coord[0]+1, coord[1])] = self.home[0]
                 self.game_info.static_objs[(coord[0], coord[1]+1)] = self.home[0]
                 self.game_info.static_objs[(coord[0]+1, coord[1]+1)] = self.home[0]
-
                 home_isfirst[0] = False
             elif(coord[0] > 15 and home_isfirst[1]):
                 self.home[1] = Home(self, coord[0], coord[1])

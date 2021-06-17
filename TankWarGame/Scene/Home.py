@@ -18,11 +18,25 @@ class Home(QtWidgets.QPushButton):
         QtWidgets.QApplication.processEvents()
         if(self.HP <= 0):
             self.dead(id)
+    
+        
         
     def dead(self, id):
         print('[Home.py->dead] GameOver')
         if(id == self.game_info.tank0):
             print('player {} win, player {} loss'.format(self.game_info.tank1, self.game_info.tank0))
+            self.game_info.stat_ui.update_result(self.game_info.tank1)
+            self.game_info.winner = self.game_info.tank1
+            self.game_info.loser = self.game_info.tank0
         else:
             print('player {} win, player {} loss'.format(self.game_info.tank0, self.game_info.tank1))
+            self.game_info.stat_ui.update_result(self.game_info.tank0)
+            self.game_info.winner = self.game_info.tank0
+            self.game_info.loser = self.game_info.tank1
+
+        self.game_info.game_over = True
+        
+        
+
+        
         # process

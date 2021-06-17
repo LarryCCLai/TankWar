@@ -24,7 +24,6 @@ class MainWidget(QtWidgets.QWidget):
         header_label.setAlignment(QtCore.Qt.AlignCenter)
         function_widget = FunctionWidget(client)
         
-        
         layout.addWidget(header_label, stretch=1)
         layout.addWidget(ip_label, stretch=1)
         layout.addWidget(function_widget, stretch=10)

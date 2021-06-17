@@ -18,6 +18,13 @@ class Icon(QtWidgets.QPushButton):
         self.setGeometry(rect)
         self.setStyleSheet(image)
 
+class BackButton(QtWidgets.QPushButton):
+    def __init__(self, Form, rect, text, font_size=16):
+        super().__init__(Form)
+        self.setGeometry(rect)
+        self.setFont(QtGui.QFont("微軟正黑體", font_size))
+        self.setText(text)
+
 class PlayerInfo(QtWidgets.QFrame):
     def __init__(self, Form, rect, id):
         super().__init__(Form)
@@ -38,6 +45,9 @@ class StatUI(QtWidgets.QFrame):
 
         self.player0 = PlayerInfo(self, QtCore.QRect(0, 40, self.gmae_info.stat_ui_width, self.gmae_info.stat_ui_height/2), 0)
         self.player1 = PlayerInfo(self, QtCore.QRect(0, self.gmae_info.stat_ui_height/2, self.gmae_info.stat_ui_width, self.gmae_info.stat_ui_height/2), 1)
+        self.result_label = StatLabel(self, QtCore.QRect(0, 600, 200, 20), 'Winner: None', 13 , 'red')
+        self.close_button = BackButton(self, QtCore.QRect(0, 650, 200, 20), 'Close')
+        self.close_button.setEnabled(False)
         self.players={0:self.player0, 1:self.player1}
         self.gmae_info.stat_ui = self
 
@@ -49,3 +59,7 @@ class StatUI(QtWidgets.QFrame):
     
     def update_home_hp(self, id, hp):
         self.players[id].home_HP.setText('Home HP: {}'.format(hp))
+    
+    def update_result(self, winner):
+        self.close_button.setEnabled(True)
+        self.result_label.setText('Winner: Player {}'.format(winner))
