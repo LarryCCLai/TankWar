@@ -20,9 +20,9 @@ class Home(QtWidgets.QPushButton):
             self.dead(id)
     
         
-        
     def dead(self, id):
         print('[Home.py->dead] GameOver')
+
         if(id == self.game_info.tank0):
             print('player {} win, player {} loss'.format(self.game_info.tank1, self.game_info.tank0))
             self.game_info.stat_ui.update_result(self.game_info.tank1)

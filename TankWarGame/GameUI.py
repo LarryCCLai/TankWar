@@ -34,16 +34,17 @@ class GameUI(QtWidgets.QFrame):
     def generate_home(self):
         home_isfirst = {0:True, 1:True}
         for coord in self.game_info.map_dict:
-            if(self.game_info.map_dict[coord] != self.game_info.home):
+            if(self.game_info.map_dict[coord] != self.game_info.home0 and 
+                self.game_info.map_dict[coord] != self.game_info.home1):
                 continue
-            if(coord[0]< 15 and home_isfirst[0]):
+            if(coord[0]< 15 and home_isfirst[0] and self.game_info.map_dict[coord] == self.game_info.home0):
                 self.home[0] = Home(self, coord[0], coord[1])
                 self.game_info.static_objs[(coord[0], coord[1])] = self.home[0]
                 self.game_info.static_objs[(coord[0]+1, coord[1])] = self.home[0]
                 self.game_info.static_objs[(coord[0], coord[1]+1)] = self.home[0]
                 self.game_info.static_objs[(coord[0]+1, coord[1]+1)] = self.home[0]
                 home_isfirst[0] = False
-            elif(coord[0] > 15 and home_isfirst[1]):
+            elif(coord[0] > 15 and home_isfirst[1] and self.game_info.map_dict[coord] == self.game_info.home1):
                 self.home[1] = Home(self, coord[0], coord[1])
                 self.game_info.static_objs[(coord[0], coord[1])] = self.home[1]
                 self.game_info.static_objs[(coord[0]+1, coord[1])] = self.home[1]
@@ -74,7 +75,9 @@ class GameUI(QtWidgets.QFrame):
             if(self.game_info.map_dict[coord] == self.game_info.none or
                 self.game_info.map_dict[coord] == self.game_info.tank0 or 
                 self.game_info.map_dict[coord] == self.game_info.tank1 or
-                self.game_info.map_dict[coord] == self.game_info.home):
+                self.game_info.map_dict[coord] == self.game_info.home or
+                self.game_info.map_dict[coord] == self.game_info.home0 or
+                self.game_info.map_dict[coord] == self.game_info.home1):
                 continue
             self.game_info.static_objs[coord] = sence_dict[self.game_info.map_dict[coord]](self, coord[0], coord[1])
     

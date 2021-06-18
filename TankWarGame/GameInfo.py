@@ -11,6 +11,8 @@ class GameInfo:
         self.home = 5
         self.border = 6
         self.none = 7
+        self.home0 = 8
+        self.home1 = 9
         self.game_over = False
         self.loser = None
         self.winner = None
@@ -30,7 +32,7 @@ class GameInfo:
         
         #used to initilize 
         self.tank_hp = 100
-        self.tank_atk = 100
+        self.tank_atk = 10
         self.tank_speed = 1       # map unit
         self.home_hp = 10
         self.bullet_speed = 12     #pixel
