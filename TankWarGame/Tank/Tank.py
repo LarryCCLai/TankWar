@@ -47,14 +47,19 @@ class Tank(QtWidgets.QPushButton):
             obj_id = self.check_front(direction)
             print(obj_id)
 
-            if ( (obj_id[0] == self.game_info.none or obj_id[0] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank or obj_id[0] == self.game_info.bonus_tank) \
-                and (obj_id[1] == self.game_info.none or obj_id[1] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank or obj_id[1] == self.game_info.bonus_tank)):
+            if ( (obj_id[0] == self.game_info.none or obj_id[0] == self.game_info.tree or obj_id[0] == self.game_info.bonus_tank or obj_id[0] == self.game_info.bonus_star) \
+                and (obj_id[1] == self.game_info.none or obj_id[1] == self.game_info.tree or obj_id[1] == self.game_info.bonus_tank or obj_id[1] == self.game_info.bonus_star)):
 
                 self.clear_position()
                 
                 if self.game_info.bonus_tank in obj_id:
-                        self.game_info.bonus_obj.dead()
-                        print('Got Bonus')
+                    self.game_info.bonus_obj.dead()
+                    self.game_info.bullet_level = 2
+                    print('Got Bonus: tank')
+                elif self.game_info.bonus_star in obj_id:
+                    self.game_info.bonus_obj.dead()
+                    self.beHit(self.ATK*(-1))
+                    print(f'Got Bonus: star, {self.game_info.tank_hp}')
 
                 if(direction=='left'):
                     self.cur_x -= self.speed
@@ -109,6 +114,8 @@ class Tank(QtWidgets.QPushButton):
 
     def beHit(self, ATK):
         self.HP -= ATK
+        if self.HP > 100:
+            self.HP = 100
         self.game_info.stat_ui.update_tank_hp(self.id, self.HP)
         QtWidgets.QApplication.processEvents()
         if(self.HP <= 0):

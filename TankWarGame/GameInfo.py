@@ -54,6 +54,7 @@ class GameInfo:
         self.bonus_type = None
         self.bonus_locate = list()
         self.bonus_tank = 0.1
+        self.bonus_star = 0.2
         
         pygame.init()
         pygame.mixer.init()

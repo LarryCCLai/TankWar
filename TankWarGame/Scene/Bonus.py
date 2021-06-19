@@ -20,7 +20,7 @@ class Bonus(QtWidgets.QPushButton):
         self.y = random.randint(self.game_info.coord_left_y+1, self.game_info.coord_right_y-1)
 
     def random_bonus(self):
-        bonus_list = ['tank']
+        bonus_list = ['tank', 'star']
         bonus = random.choice(bonus_list)
         self.bonus_type = (bonus_list.index(bonus) + 1)/10
         return bonus
