@@ -41,6 +41,7 @@ class MainWidget(QtWidgets.QWidget):
 class FunctionWidget(QtWidgets.QStackedWidget):
     def __init__(self, client):
         self.client = client
+        self.game_widget = None
         super().__init__()
         self.widget_dict = {
             "menu": self.addWidget(MenuWidget(self.update_widget)),
@@ -48,19 +49,30 @@ class FunctionWidget(QtWidgets.QStackedWidget):
             "sign_up": self.addWidget(SignUpWidget(self.client, self.update_widget)),
             "sign_in": self.addWidget(SignInWidget(self.client, self.update_widget)),
             "player": self.addWidget(PlayerWidget(self.client, self.update_widget)),
-            "game": self.addWidget(GameWidget(self.client, self.update_widget))
+            "game": -1
         }
         self.update_widget("menu")
     
     def update_widget(self, name, player_info=None, rival_info=None, priority=None):
+        if(name == 'game'):
+            self.game_widget = GameWidget(self.client, self.update_widget, player_info, rival_info, priority)
+            self.widget_dict['game'] = self.addWidget(self.game_widget)
+        
         self.setCurrentIndex(self.widget_dict[name])
         current_widget = self.currentWidget()
+
         if(name =='player'):
+            if(self.widget_dict['game'] != -1):
+                self.removeWidget(self.game_widget)
+                del self.game_widget
+                self.game_widget = None
+                self.widget_dict['game'] = -1
             current_widget.init(player_info)
-        elif(name == 'game'):
-            current_widget.init(player_info, rival_info, priority)
         else:
             current_widget.init()
+
         current_widget.load()
+        
+        # print('\n====================\nStackWidget Count: {}\n===================\n'.format(self.count()))
 
         

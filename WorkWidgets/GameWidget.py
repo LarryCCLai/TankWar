@@ -13,47 +13,38 @@ from TankWarGame.Tank.Tank import Tank
 from  TankWarGame.Map.Map import Map
 
 class GameWidget(QtWidgets.QWidget):
-    def __init__(self, client, update_widget_callback):
+    def __init__(self, client, update_widget_callback, player0_info, player1_info, priority):
         super().__init__()
         
         self.client = client
         self.update_widget_callback = update_widget_callback
-        self.game_info = None
-        self.game_client = None
-        self.player_info = {0: None, 1: None}
-        self.priority = None
-        self.receive = None
+        self.player_info = {0: player0_info, 1: player1_info}
+        self.priority = priority
         self.game_info = GameInfo()
         self.show_ui()
-        # self.show_ui()
-        # self.init()
-    
+        print(self.player_info[0])
+        print(self.player_info[1])
+        self.stat_ui.update_name(0, self.player_info[0]['name'])
+        self.stat_ui.update_name(1, self.player_info[1]['name'])
+
+        
+
     def load(self):
         print("game widget")
 
-    def init(self, player0_info=None, player1_info=None, priority=None):
-        self.player_info[0] = player0_info
-        self.player_info[1] = player1_info
-        self.priority = priority
-        print(self.player_info[0])
-        print(self.player_info[1])
-        
-        self.stat_ui.update_name(0, self.player_info[0]['name'])
-        self.stat_ui.update_name(1, self.player_info[1]['name'])
+    def init(self):
         if(self.priority == 0):
             self.game_client = SocketClient(self.client.host, self.player_info[1]['port'])
         else:
             self.game_client = SocketClient(self.client.host, self.player_info[0]['port'])
-
         self.receive = GameReceive(self.game_client)
         self.receive.start()
         self.receive.return_sig.connect(self.synchronize)
-        self.setFocus() 
+        self.setFocus()
 
     def show_ui(self):
         self.resize(self.game_info.ui_width, self.game_info.ui_height)
         self.game_info.map_dict = Map(self.game_info.game_ui_width, self.game_info.game_ui_height, self.game_info.bsize).read_map()
-        # self.background = Background(self, self.game_info)
         self.game_ui = GameUI(self, self.game_info)
         self.stat_ui = StatUI(self, self.game_info)
         self.stat_ui.close_button.clicked.connect(self.gameOverEvent)
@@ -100,4 +91,8 @@ class GameWidget(QtWidgets.QWidget):
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
         self.send_command.start()
 
-        self.update_widget_callback(QtWidgets.qApp.quit)
+        if(self.priority==0):
+            self.update_widget_callback('player', self.player_info[0])
+        else:
+            self.update_widget_callback('player', self.player_info[1])
+        # self.update_widget_callback(QtWidgets.qApp.quit)
