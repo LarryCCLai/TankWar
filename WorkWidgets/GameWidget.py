@@ -86,12 +86,14 @@ class GameWidget(QtWidgets.QWidget):
     
     def gameOverEvent(self):
         if(self.priority == self.game_info.winner):
+            self.player_info[self.priority]['win'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'win'})
         else:
+            self.player_info[self.priority]['loss'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
         self.send_command.start()
 
-        if(self.priority==0):
+        if(self.priority == 0):
             self.update_widget_callback('player', self.player_info[0])
         else:
             self.update_widget_callback('player', self.player_info[1])
