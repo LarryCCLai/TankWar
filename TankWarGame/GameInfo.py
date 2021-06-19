@@ -34,12 +34,12 @@ class GameInfo:
         self.tank_hp = 100
         self.tank_atk = 10
         self.tank_speed = 1       # map unit
-        self.home_hp = 10
+        self.home_hp = 100
         self.bullet_speed = 12     #pixel
         self.bullet_level = 1     #1 or 2
         self.rebirth_time = 1           #s
         
-        self.game_client = None     
+        
         self.priority = None    
         
         self.stat_ui = None

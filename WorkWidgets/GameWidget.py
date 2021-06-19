@@ -40,15 +40,12 @@ class GameWidget(QtWidgets.QWidget):
         self.receive.return_sig.connect(self.synchronize)
         
         self.game_info.priority = self.priority
-        self.game_info.game_client = self.game_client
         
         if(self.game_info.priority == 0):
-            print("\n===========\nwork\n===========\n")
             self.game_info.bonus_worker = BonusWorker(self.game_info)
             self.game_info.bonus_worker.start_bonus.connect(self.showBonusEvent)
             self.game_info.bonus_worker.stop_bonus.connect(self.clearBonusEvent)
             self.game_info.bonus_worker.start()
-
         self.setFocus()
 
     def show_ui(self):
