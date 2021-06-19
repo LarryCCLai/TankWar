@@ -9,8 +9,7 @@ class BonusWorker(QtCore.QThread):
     def run(self):
         while True:
             self.start_bonus.emit()
-            time.sleep(5)
-            # time.sleep(random.randint(6, 15))
+            time.sleep(random.randint(6, 13)-3)
+            time.sleep(3)
             self.stop_bonus.emit()
-            time.sleep(1)
-            # time.sleep(random.randint(5, 10))
+            time.sleep(random.randint(3, 5))

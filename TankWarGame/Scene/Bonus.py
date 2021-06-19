@@ -2,6 +2,7 @@ from TankWarGame.Scene.Tree import Tree
 import random, time
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QThread
+import math
 
 class Bonus(QtWidgets.QPushButton):
     def __init__(self, game_ui):
@@ -34,11 +35,12 @@ class Bonus(QtWidgets.QPushButton):
     def show(self):
         self.life = True
         while True:
-            # self.random_xy()
-            self.x, self.y = 20, 20
-            if self.game_info.map_dict[(self.x, self.y)] == self.game_info.none:
-                self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
-                break  
+            self.random_xy()
+            if self.game_info.map_dict[(self.x, self.y)] == self.game_info.none and \
+                math.pow((self.x - self.game_info.tank_objs[0].cur_x), 2) + math.pow((self.y - self.game_info.tank_objs[0].cur_y), 2) > 2.5 and \
+                math.pow((self.x - self.game_info.tank_objs[1].cur_x), 2) + math.pow((self.y - self.game_info.tank_objs[1].cur_y), 2) > 2.5:
+                    self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
+                    break
 
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())
         self.update_flag()
