@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 class Home(QtWidgets.QPushButton):
     def __init__(self, game_ui, x, y):
         super().__init__(game_ui)
+        self.game_ui = game_ui
         self.game_info = game_ui.game_info
         self.HP = self.game_info.home_hp
         
@@ -35,6 +36,7 @@ class Home(QtWidgets.QPushButton):
             self.game_info.loser = self.game_info.tank1
 
         self.game_info.game_over = True
+        self.game_ui.game_over.setChecked(True)
         
         
 

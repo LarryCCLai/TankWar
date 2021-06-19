@@ -27,8 +27,6 @@ class GameWidget(QtWidgets.QWidget):
         self.stat_ui.update_name(0, self.player_info[0]['name'])
         self.stat_ui.update_name(1, self.player_info[1]['name'])
 
-        
-
     def load(self):
         print("game widget")
 
@@ -47,7 +45,8 @@ class GameWidget(QtWidgets.QWidget):
         self.game_info.map_dict = Map(self.game_info.game_ui_width, self.game_info.game_ui_height, self.game_info.bsize).read_map()
         self.game_ui = GameUI(self, self.game_info)
         self.stat_ui = StatUI(self, self.game_info)
-        self.stat_ui.close_button.clicked.connect(self.gameOverEvent)
+        self.stat_ui.close_button.clicked.connect(self.closeButtonEvent)
+        self.game_ui.game_over.stateChanged.connect(self.gameOverEvent)
         
     def keyPressEvent(self, e):
         if e.key()==QtCore.Qt.Key_Right:
@@ -86,15 +85,17 @@ class GameWidget(QtWidgets.QWidget):
     
     def gameOverEvent(self):
         if(self.priority == self.game_info.winner):
+            self.game_info.win_music.play()
             self.player_info[self.priority]['win'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'win'})
         else:
+            self.game_info.loss_music.play()
             self.player_info[self.priority]['loss'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
         self.send_command.start()
-
+    
+    def closeButtonEvent(self):
         if(self.priority == 0):
             self.update_widget_callback('player', self.player_info[0])
         else:
             self.update_widget_callback('player', self.player_info[1])
-        # self.update_widget_callback(QtWidgets.qApp.quit)
