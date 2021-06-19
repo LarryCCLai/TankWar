@@ -55,10 +55,12 @@ class Tank(QtWidgets.QPushButton):
                 if self.game_info.bonus_tank in obj_id:
                     self.game_info.bonus_obj.dead()
                     self.game_info.bullet_level = 2
+                    self.game_info.bouns_music.play()
                     print('Got Bonus: tank')
                 elif self.game_info.bonus_star in obj_id:
                     self.game_info.bonus_obj.dead()
                     self.beHit(self.ATK*(-1))
+                    self.game_info.bouns_music.play()
                     print(f'Got Bonus: star, {self.game_info.tank_hp}')
 
                 if(direction=='left'):

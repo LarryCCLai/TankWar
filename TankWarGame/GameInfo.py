@@ -72,5 +72,5 @@ class GameInfo:
         self.loss_music = pygame.mixer.Sound("./TankWarGame/Audios/sb2.wav")
         self.loss_music.set_volume(self.volume)
 
-        self.bouns_music = pygame.mixer.Sound("./TankWarGame/Audios/add.wav")
-        self.bouns_music.set_volume(self.volume)
+        self.bouns_music = pygame.mixer.Sound("./TankWarGame/Audios/mario_mushroom_effect.wav")
+        self.bouns_music.set_volume(self.volume*0.2)
