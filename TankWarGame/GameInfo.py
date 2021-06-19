@@ -37,20 +37,20 @@ class GameInfo:
         self.home_hp = 10
         self.bullet_speed = 12     #pixel
         self.bullet_level = 1     #1 or 2
-
         self.rebirth_time = 1           #s
         
-        self.self_id = None     #not used 
-        self.rival_id = None    #not used
+        self.game_client = None     
+        self.priority = None    
         
         self.stat_ui = None
         self.map_dict = None
 
         self.static_objs = dict()  #key: coord
-        self.tank_objs = None    #key: coord
-        self.home_objs = None
-        
+        self.tank_objs = {0:None, 1:None}    
+        self.home_objs = {0:None, 1:None}
         self.bonus_obj = None
+        
+        self.bonus_worker = None
         self.bonus_type = None
         self.bonus_locate = list()
         self.bonus_tank = 0.1

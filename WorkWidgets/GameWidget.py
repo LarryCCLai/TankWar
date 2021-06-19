@@ -10,6 +10,7 @@ from TankWarGame.Background import Background
 from TankWarGame.GameUI import GameUI
 from TankWarGame.StatUI import StatUI
 from  TankWarGame.Map.Map import Map
+from TankWarGame.Scene.BonusWorker import BonusWorker
 
 class GameWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback, player0_info, player1_info, priority):
@@ -37,6 +38,17 @@ class GameWidget(QtWidgets.QWidget):
         self.receive = GameReceive(self.game_client)
         self.receive.start()
         self.receive.return_sig.connect(self.synchronize)
+        
+        self.game_info.priority = self.priority
+        self.game_info.game_client = self.game_client
+        
+        if(self.game_info.priority == 0):
+            print("\n===========\nwork\n===========\n")
+            self.game_info.bonus_worker = BonusWorker(self.game_info)
+            self.game_info.bonus_worker.start_bonus.connect(self.showBonusEvent)
+            self.game_info.bonus_worker.stop_bonus.connect(self.clearBonusEvent)
+            self.game_info.bonus_worker.start()
+
         self.setFocus()
 
     def show_ui(self):
@@ -51,23 +63,39 @@ class GameWidget(QtWidgets.QWidget):
         if e.key()==QtCore.Qt.Key_Right:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'right'})
             self.send_command.start()
-            self.game_ui.tank[self.priority].move('right')
+            self.game_info.tank_objs[self.priority].move('right')
         elif e.key()==QtCore.Qt.Key_Up:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'up'})
             self.send_command.start()
-            self.game_ui.tank[self.priority].move('up')
+            self.game_info.tank_objs[self.priority].move('up')
         elif e.key()==QtCore.Qt.Key_Down:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'down'})
             self.send_command.start()
-            self.game_ui.tank[self.priority].move('down')
+            self.game_info.tank_objs[self.priority].move('down')
         elif e.key()==QtCore.Qt.Key_Left:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'left'})
             self.send_command.start()
-            self.game_ui.tank[self.priority].move('left')
+            self.game_info.tank_objs[self.priority].move('left')
         elif e.key()==QtCore.Qt.Key_Space:
             self.send_command = GameSend(self.game_client, 'shoot', {'priority': self.priority})
             self.send_command.start()
-            self.game_ui.tank[self.priority].shoot()
+            self.game_info.tank_objs[self.priority].shoot()
+
+    def showBonusEvent(self, command_params):
+        command_params = json.loads(command_params)
+        command = command_params['command']
+        params = command_params['parameters']
+        self.game_info.bonus_obj.show(params['x'], params['y'], params['bonus_name'], params['bonus_id'])
+        self.send_command = GameSend(self.game_client, command, params)
+        self.send_command.start()
+
+    def clearBonusEvent(self, command_params):
+        command_params = json.loads(command_params)
+        command = command_params['command']
+        params = command_params['parameters']
+        self.game_info.bonus_obj.dead()
+        self.send_command = GameSend(self.game_client, command, params)
+        self.send_command.start()
 
     def synchronize(self, result):
         response = json.loads(result)
@@ -75,13 +103,22 @@ class GameWidget(QtWidgets.QWidget):
         priority = response['parameters']['priority']
         if (command == 'move'):
             direction = response['parameters']['direction']
-            self.game_ui.tank[priority].move(direction)
+            self.game_info.tank_objs[priority].move(direction)
         elif(command == 'shoot'):
-            self.game_ui.tank[priority].shoot()
+            self.game_info.tank_objs[priority].shoot()
         elif(command == 'update'):
-            self.game_ui.tank[priority].update()
+            self.game_info.tank_objs[priority].update()
         elif(command == 'close'):
             self.close_gamesocket_server()
+        elif(command == 'show_bonus'):    
+            x = response['parameters']['x']
+            y = response['parameters']['y']
+            bonus_name = response['parameters']['bonus_name']
+            bonus_id = response['parameters']['bonus_id']
+            self.game_info.bonus_obj.show(x, y, bonus_name, bonus_id)
+        elif(command == 'clear_bonus'):
+            self.game_info.bonus_obj.dead()   
+
     def gameOverEvent(self):
         self.receive.terminate()
         

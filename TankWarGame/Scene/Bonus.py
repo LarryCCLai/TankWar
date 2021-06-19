@@ -2,7 +2,7 @@ from TankWarGame.Scene.Tree import Tree
 import random, time
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import QThread
-import math
+
 
 class Bonus(QtWidgets.QPushButton):
     def __init__(self, game_ui):
@@ -10,42 +10,32 @@ class Bonus(QtWidgets.QPushButton):
         self.game_ui = game_ui
         self.game_info = game_ui.game_info
         self.life = True 
-        self.bonus = self.game_info.bonus_obj
+        self.bonus_img = None
         self.show_time = 10
         self.freq = 30
-        self.bonus_type = 0.1
-    
-    def random_xy(self):
-        random.seed(time.time())
-        self.x = random.randint(self.game_info.coord_left_x+1, self.game_info.coord_right_x-1)
-        self.y = random.randint(self.game_info.coord_left_y+1, self.game_info.coord_right_y-1)
+        self.bonus_id = 0.1
+        self.x = 0
+        self.y = 0
+        self.bonus_name = None    
 
-    def random_bonus(self):
-        bonus_list = ['tank', 'star']
-        bonus = random.choice(bonus_list)
-        self.bonus_type = (bonus_list.index(bonus) + 1)/10
-        return bonus
+    
 
     def update_flag(self):
-        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_type = self.bonus_type
+        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_id = self.bonus_id
         
     def clear_flag(self):
-        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_type = self.game_info.none
+        self.game_info.map_dict[(self.x, self.y)] = self.game_info.bonus_id = self.game_info.none
         
-    def show(self):
+    def show(self, x, y, bonus_name, bonus_id):
         self.life = True
-        while True:
-            self.random_xy()
-            if self.game_info.map_dict[(self.x, self.y)] == self.game_info.none and \
-                math.pow((self.x - self.game_info.tank_objs[0].cur_x), 2) + math.pow((self.y - self.game_info.tank_objs[0].cur_y), 2) > 2.5 and \
-                math.pow((self.x - self.game_info.tank_objs[1].cur_x), 2) + math.pow((self.y - self.game_info.tank_objs[1].cur_y), 2) > 2.5:
-                    self.setGeometry(self.x*self.game_info.bsize, self.y*self.game_info.bsize, 32, 32)
-                    break
-
-        self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}'%self.random_bonus())
+        self.x = x
+        self.y = y
+        self.bonus_id = bonus_id
+        self.setGeometry(self.x * self.game_info.bsize, self.y * self.game_info.bsize, 32, 32)
+        self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bonus/%s.png)}' % bonus_name)
         self.update_flag()
         self.setVisible(True)
-        
+    
     def dead(self):
         self.life = False
         self.clear_flag()
