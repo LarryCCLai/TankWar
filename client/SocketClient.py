@@ -19,12 +19,13 @@ class SocketClient:
 
     def wait_response(self):
         data = self.client_socket.recv(BUFFER_SIZE)
-        
         raw_data = data.decode()
-        raw_data = json.loads(data.decode())
+        if(raw_data == '' or raw_data == None):
+            raw_data = {'command':'close', 'parameters': {'priority' : -1}, 'status': 'gameover'}
+        else:
+            raw_data = json.loads(raw_data)
 
         print("    The client received data => {}".format(raw_data))
-
         return raw_data
 
     

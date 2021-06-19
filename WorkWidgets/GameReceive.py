@@ -7,8 +7,13 @@ class GameReceive(QtCore.QThread):
     def __init__(self, clinet):
         super().__init__()
         self.client = clinet
+        self.flag = True
+
+    def terminate(self):
+        self.flag = False
+        
     def run(self):
-        while(True):
+        while(self.flag):
             response = self.client.wait_response()
             self.return_sig.emit(json.dumps(response))
         

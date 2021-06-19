@@ -84,3 +84,8 @@ class GameMatcher():
         game_socket.serve()
         self.playing_dict[self.port] = {'players':(self.wait_list[0], self.wait_list[1]), 'socket': game_socket}
         
+    
+    def close_game_socket(self, port):
+        self.playing_dict[port]['socket'].terminate()
+        self.playing_dict[port]['socket'].server_socket.close()
+        del self.playing_dict[port]

@@ -9,7 +9,6 @@ from TankWarGame.GameInfo import GameInfo
 from TankWarGame.Background import Background
 from TankWarGame.GameUI import GameUI
 from TankWarGame.StatUI import StatUI
-from TankWarGame.Tank.Tank import Tank
 from  TankWarGame.Map.Map import Map
 
 class GameWidget(QtWidgets.QWidget):
@@ -26,7 +25,7 @@ class GameWidget(QtWidgets.QWidget):
         print(self.player_info[1])
         self.stat_ui.update_name(0, self.player_info[0]['name'])
         self.stat_ui.update_name(1, self.player_info[1]['name'])
-
+        self.flag = True
     def load(self):
         print("game widget")
 
@@ -72,7 +71,6 @@ class GameWidget(QtWidgets.QWidget):
 
     def synchronize(self, result):
         response = json.loads(result)
-        print(response)
         command = response['command']
         priority = response['parameters']['priority']
         if (command == 'move'):
@@ -82,8 +80,11 @@ class GameWidget(QtWidgets.QWidget):
             self.game_ui.tank[priority].shoot()
         elif(command == 'update'):
             self.game_ui.tank[priority].update()
-    
+        elif(command == 'close'):
+            self.close_gamesocket_server()
     def gameOverEvent(self):
+        self.receive.terminate()
+        
         if(self.priority == self.game_info.winner):
             self.game_info.win_music.play()
             self.player_info[self.priority]['win'] += 1
@@ -92,9 +93,24 @@ class GameWidget(QtWidgets.QWidget):
             self.game_info.loss_music.play()
             self.player_info[self.priority]['loss'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
+        
         self.send_command.start()
     
     def closeButtonEvent(self):
+        self.close_gamesocket_client()
+
+    def close_gamesocket_client(self):
+        self.game_client.send_command('close', '0')
+        
+    def close_gamesocket_server(self):
+        if(self.priority == 0):
+            self.send_close_gamesocket = ExecuteCommand(self.client, 'close_game_socket', {'port': self.player_info[1]['port']})
+            self.send_close_gamesocket.start()
+            self.send_close_gamesocket.return_sig.connect(self.return_player)
+        else:
+            self.return_player()
+
+    def return_player(self):
         if(self.priority == 0):
             self.update_widget_callback('player', self.player_info[0])
         else:
