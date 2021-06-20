@@ -5,7 +5,6 @@ from WorkWidgets.GameReceive import GameReceive
 import json
 from client.SocketClient import SocketClient
 from TankWarGame.GameInfo import GameInfo
-from TankWarGame.Background import Background
 from TankWarGame.GameUI import GameUI
 from TankWarGame.StatUI import StatUI
 from  TankWarGame.Map.Map import Map
@@ -58,6 +57,7 @@ class GameWidget(QtWidgets.QWidget):
             self.game_client = SocketClient(self.client.host, self.player_info[1]['port'])
         else:
             self.game_client = SocketClient(self.client.host, self.player_info[0]['port'])
+
         self.receive = GameReceive(self.game_client)
         self.receive.start()
         self.receive.return_sig.connect(self.synchronize)
@@ -141,7 +141,10 @@ class GameWidget(QtWidgets.QWidget):
 
     def gameOverEvent(self):
         self.receive.terminate()
-        
+        if(self.game_info.priority == 0):
+            self.game_info.bonus_worker.terminate()
+
+        # self.game_client.send_command('close', '0')
         if(self.priority == self.game_info.winner):
             self.win_music.play()
             self.player_info[self.priority]['win'] += 1

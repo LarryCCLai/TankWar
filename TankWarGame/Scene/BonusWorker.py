@@ -33,13 +33,10 @@ class BonusWorker(QtCore.QThread):
             time.sleep(random.randint(6, 13)-3)
             time.sleep(3)
 
-            
             command = 'clear_bonus'
             params = {'priority': self.game_info.priority}
             command_params ={'command': command, 'parameters': params}
             self.stop_bonus.emit(json.dumps(command_params))
-            
-
             time.sleep(random.randint(3, 5))
 
     def find_xy(self):
