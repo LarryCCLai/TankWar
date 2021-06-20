@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 from  TankWarGame.Scene.Tree import Tree
 
 class Background(QtWidgets.QFrame):

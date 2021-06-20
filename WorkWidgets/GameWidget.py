@@ -1,6 +1,5 @@
 from WorkWidgets.ExecuteCommand import ExecuteCommand
-from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
-from WorkWidgetComponents import LabelComponent, LineEditComponent, ButtonComponent
+from PyQt5 import QtWidgets, QtCore, QtMultimedia
 from WorkWidgets.GameSend import GameSend
 from WorkWidgets.GameReceive import GameReceive 
 import json

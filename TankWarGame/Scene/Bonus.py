@@ -1,7 +1,4 @@
-from TankWarGame.Scene.Tree import Tree
-import random, time
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets
 
 
 class Bonus(QtWidgets.QPushButton):

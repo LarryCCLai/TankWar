@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 from WorkWidgetComponents import LabelComponent, LineEditComponent, ButtonComponent
 import json
 from WorkWidgets.ExecuteCommand import ExecuteCommand

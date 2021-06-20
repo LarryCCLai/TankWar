@@ -2,8 +2,7 @@ import time
 import random
 import math
 import json
-from PyQt5 import QtWidgets, QtCore, QtGui
-from WorkWidgets.GameSend import GameSend
+from PyQt5 import QtCore
 
 class BonusWorker(QtCore.QThread):
     start_bonus = QtCore.pyqtSignal(str)

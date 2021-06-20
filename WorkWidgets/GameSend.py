@@ -1,6 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtCore import pyqtSignal
-import json
+from PyQt5 import QtCore
 
 class GameSend(QtCore.QThread):
     def __init__(self, clinet, command, params):

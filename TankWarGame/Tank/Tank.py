@@ -1,9 +1,6 @@
-import sys
 import threading
-import time
 
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets
 from TankWarGame.Tank.Bullet import Bullet
 from TankWarGame.Tank.BulletWorker import BulletWorker
 

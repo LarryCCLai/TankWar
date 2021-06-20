@@ -1,6 +1,5 @@
 import time
-import random
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtCore
 
 class BulletWorker(QtCore.QThread):
     done_singnal = QtCore.pyqtSignal()

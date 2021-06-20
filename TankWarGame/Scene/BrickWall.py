@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets
 
 class BrickWall(QtWidgets.QPushButton):
     def __init__(self, game_ui, x, y):

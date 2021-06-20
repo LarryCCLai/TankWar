@@ -1,9 +1,6 @@
-from TankWarGame.Scene.Tree import Tree
 import time
-import sys
 import threading
-from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets
 
 class Bullet(QtWidgets.QPushButton):
     def __init__(self, game_ui, tank_obj):

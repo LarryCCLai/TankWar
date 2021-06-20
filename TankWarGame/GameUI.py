@@ -1,12 +1,10 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtCore import QThread
+from PyQt5 import QtWidgets
 from  TankWarGame.Tank.Tank import Tank
 from  TankWarGame.Scene.Tree import Tree
 from  TankWarGame.Scene.BrickWall import BrickWall
 from  TankWarGame.Scene.IronWall import IronWall
 from  TankWarGame.Scene.Home import Home
 from TankWarGame.Scene.Border import Border
-from  TankWarGame.Map.Map import Map
 from TankWarGame.Scene.Bonus import Bonus
 sence_dict = {
     2:Tree,
