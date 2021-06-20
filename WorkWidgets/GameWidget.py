@@ -1,5 +1,5 @@
 from WorkWidgets.ExecuteCommand import ExecuteCommand
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore, QtMultimedia
 from WorkWidgetComponents import LabelComponent, LineEditComponent, ButtonComponent
 from WorkWidgets.GameSend import GameSend
 from WorkWidgets.GameReceive import GameReceive 
@@ -27,8 +27,32 @@ class GameWidget(QtWidgets.QWidget):
         self.stat_ui.update_name(0, self.player_info[0]['name'])
         self.stat_ui.update_name(1, self.player_info[1]['name'])
         self.flag = True
+        
+        self.volume=0.6
+        
+        self.start_music = QtMultimedia.QSoundEffect(self)
+        self.start_music.setSource(QtCore.QUrl.fromLocalFile('./TankWarGame/Audios/start.wav'))
+        self.start_music.setVolume(self.volume)
+        
+        self.game_info.bullet_music = QtMultimedia.QSoundEffect(self)
+        self.game_info.bullet_music.setSource(QtCore.QUrl.fromLocalFile('./TankWarGame/Audios/bang.wav'))
+        self.game_info.bullet_music.setVolume(self.volume)
+
+        self.game_info.bouns_music = QtMultimedia.QSoundEffect(self)
+        self.game_info.bouns_music.setSource(QtCore.QUrl.fromLocalFile('./TankWarGame/Audios/mario_mushroom_effect.wav'))
+        self.game_info.bouns_music.setVolume(self.volume)
+        
+        self.win_music = QtMultimedia.QSoundEffect(self)
+        self.win_music.setSource(QtCore.QUrl.fromLocalFile('./TankWarGame/Audios/victory.wav'))
+        self.win_music.setVolume(self.volume)
+
+        self.loss_music = QtMultimedia.QSoundEffect(self)
+        self.loss_music.setSource(QtCore.QUrl.fromLocalFile('./TankWarGame/Audios/loss.wav'))
+        self.loss_music.setVolume(self.volume)
+        
     def load(self):
         print("game widget")
+        self.start_music.play()
 
     def init(self):
         if(self.priority == 0):
@@ -120,11 +144,11 @@ class GameWidget(QtWidgets.QWidget):
         self.receive.terminate()
         
         if(self.priority == self.game_info.winner):
-            self.game_info.win_music.play()
+            self.win_music.play()
             self.player_info[self.priority]['win'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'win'})
         else:
-            self.game_info.loss_music.play()
+            self.loss_music.play()
             self.player_info[self.priority]['loss'] += 1
             self.send_command = ExecuteCommand(self.client, 'update', {'name': self.player_info[self.priority]['name'], 'result': 'lose'})
         

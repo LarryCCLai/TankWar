@@ -55,22 +55,3 @@ class GameInfo:
         self.bonus_locate = list()
         self.bonus_tank = 0.1
         self.bonus_star = 0.2
-        
-        pygame.init()
-        pygame.mixer.init()
-        self.volume = 1
-        
-        self.bullet_music = pygame.mixer.Sound("./TankWarGame/Audios/bang.wav")
-        self.bullet_music.set_volume(self.volume*0.2)
-        
-        self.start_music = pygame.mixer.Sound("./TankWarGame/Audios/start.wav")
-        self.start_music.set_volume(self.volume*0.6)
-        
-        self.win_music = pygame.mixer.Sound("./TankWarGame/Audios/victory.wav")
-        self.win_music.set_volume(self.volume)
-
-        self.loss_music = pygame.mixer.Sound("./TankWarGame/Audios/sb2.wav")
-        self.loss_music.set_volume(self.volume)
-
-        self.bouns_music = pygame.mixer.Sound("./TankWarGame/Audios/mario_mushroom_effect.wav")
-        self.bouns_music.set_volume(self.volume*0.2)
