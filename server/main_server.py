@@ -4,7 +4,7 @@ from SocketServer import SocketServer
 from DB.DBConnection import DBConnection
 from DB.DBInitializer import DBInitializer
 
-host = "140.113.150.236"
+host = "127.0.0.1"
 port = 20001
 accept_num = 30
 DBConnection.db_file_path = "../example.db"

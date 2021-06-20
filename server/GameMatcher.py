@@ -78,7 +78,7 @@ class GameMatcher():
         return self.port
     
     def open_game_socket(self):
-        host = '140.113.150.236'
+        host = '127.0.0.1'
         game_socket = GameSocket(host, self.port, 2)
         game_socket.setDaemon(True)
         game_socket.serve()

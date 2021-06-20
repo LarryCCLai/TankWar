@@ -8,7 +8,7 @@ from client.SocketClient import SocketClient
 
 
 
-host = "140.113.150.236"
+host = "127.0.0.1"
 port = 20001
 BUFFER_SIZE = 1940
 client = SocketClient(host, port)
