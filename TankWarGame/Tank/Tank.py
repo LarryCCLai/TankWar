@@ -21,6 +21,8 @@ class Tank(QtWidgets.QPushButton):
         self.lock = threading.Lock()
         self.dead_flag = False
         self.bullet_life = False
+        self.bullet_level = self.game_info.bullet_level
+        self.bullet = Bullet(self.game_ui, self)
         self.change_direction(direction)
         self.setGeometry(x*self.game_info.bsize, y*self.game_info.bsize, self.game_info.bsize*2, self.game_info.bsize*2)
         self.setEnabled(False)
@@ -51,7 +53,7 @@ class Tank(QtWidgets.QPushButton):
                 
                 if self.game_info.bonus_tank in obj_id:
                     self.game_info.bonus_obj.dead()
-                    self.game_info.bullet_level = 2
+                    self.bullet_level = 2
                     self.game_info.bouns_music.play()
                     print('Got Bonus: tank')
                 elif self.game_info.bonus_star in obj_id:
@@ -100,7 +102,7 @@ class Tank(QtWidgets.QPushButton):
     def shoot(self): 
         if ((self.dead_flag != True) and (not self.bullet_life) and (self.game_info.game_over != True)):
             self.bullet_life = True
-            self.bullet = Bullet(self.game_ui, self)
+            self.bullet.reset(self.direction, self.bullet_level, self.cur_x, self.cur_y)
             try:
                 self.bullet_worker = BulletWorker(self.bullet)
                 self.bullet_worker.done_singnal.connect(self.shoot_done)

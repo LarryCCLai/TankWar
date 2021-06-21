@@ -6,16 +6,20 @@ class Bullet(QtWidgets.QPushButton):
     def __init__(self, game_ui, tank_obj):
         super().__init__(game_ui)
         self.tank_obj = tank_obj               
-        self.direction = tank_obj.direction   
+        self.direction = None  
         self.game_ui = game_ui
         self.game_info = game_ui.game_info                   
         self.life = True                     
         self.speed = self.game_info.bullet_speed
-        self.level = self.game_info.bullet_level
+        self.level = tank_obj.bullet_level
 
-        self.x, self.y = self.xy_(self.tank_obj.cur_x,self.tank_obj.cur_y)                           
+    def reset(self, direction, bullet_level, x, y):
+        self.direction = direction
+        self.level = bullet_level
+        self.x, self.y = self.xy_(x, y)                           
         self.setGeometry(self.x, self.y, 12, 12)
         self.setStyleSheet('QPushButton{border-image:url(./TankWarGame/Image/bullet/bullet_%s.png)}' % (self.direction))
+        self.life = True
         self.setVisible(True)
 
     def xy_(self, cur_x, cur_y):

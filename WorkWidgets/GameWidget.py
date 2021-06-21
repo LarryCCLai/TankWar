@@ -9,7 +9,7 @@ from TankWarGame.GameUI import GameUI
 from TankWarGame.StatUI import StatUI
 from  TankWarGame.Map.Map import Map
 from TankWarGame.Scene.BonusWorker import BonusWorker
-
+import threading
 class GameWidget(QtWidgets.QWidget):
     def __init__(self, client, update_widget_callback, player0_info, player1_info, priority):
         super().__init__()
@@ -25,7 +25,7 @@ class GameWidget(QtWidgets.QWidget):
         self.stat_ui.update_name(0, self.player_info[0]['name'])
         self.stat_ui.update_name(1, self.player_info[1]['name'])
         self.flag = True
-        
+        self.lock = threading.Lock()
         self.volume=0.6
         
         self.start_music = QtMultimedia.QSoundEffect(self)
@@ -83,40 +83,33 @@ class GameWidget(QtWidgets.QWidget):
         if e.key()==QtCore.Qt.Key_Right:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'right'})
             self.send_command.start()
-            self.game_info.tank_objs[self.priority].move('right')
         elif e.key()==QtCore.Qt.Key_Up:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'up'})
             self.send_command.start()
-            self.game_info.tank_objs[self.priority].move('up')
         elif e.key()==QtCore.Qt.Key_Down:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'down'})
             self.send_command.start()
-            self.game_info.tank_objs[self.priority].move('down')
         elif e.key()==QtCore.Qt.Key_Left:
             self.send_command = GameSend(self.game_client, 'move', {'priority': self.priority, 'direction':'left'})
             self.send_command.start()
-            self.game_info.tank_objs[self.priority].move('left')
         elif e.key()==QtCore.Qt.Key_Space:
             self.send_command = GameSend(self.game_client, 'shoot', {'priority': self.priority})
             self.send_command.start()
-            self.game_info.tank_objs[self.priority].shoot()
 
     def showBonusEvent(self, command_params):
         command_params = json.loads(command_params)
         command = command_params['command']
         params = command_params['parameters']
-        self.game_info.bonus_obj.show(params['x'], params['y'], params['bonus_name'], params['bonus_id'])
         self.send_command = GameSend(self.game_client, command, params)
         self.send_command.start()
-
+        
     def clearBonusEvent(self, command_params):
         command_params = json.loads(command_params)
         command = command_params['command']
         params = command_params['parameters']
-        self.game_info.bonus_obj.dead()
         self.send_command = GameSend(self.game_client, command, params)
         self.send_command.start()
-
+        
     def synchronize(self, result):
         response = json.loads(result)
         command = response['command']
@@ -126,8 +119,6 @@ class GameWidget(QtWidgets.QWidget):
             self.game_info.tank_objs[priority].move(direction)
         elif(command == 'shoot'):
             self.game_info.tank_objs[priority].shoot()
-        elif(command == 'update'):
-            self.game_info.tank_objs[priority].update()
         elif(command == 'close'):
             self.close_gamesocket_server()
         elif(command == 'show_bonus'):    
@@ -144,7 +135,6 @@ class GameWidget(QtWidgets.QWidget):
         if(self.game_info.priority == 0):
             self.game_info.bonus_worker.terminate()
 
-        # self.game_client.send_command('close', '0')
         if(self.priority == self.game_info.winner):
             self.win_music.play()
             self.player_info[self.priority]['win'] += 1

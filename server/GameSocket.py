@@ -43,26 +43,28 @@ class GameSocket(Thread):
             try:
                 message = connection.recv(1024).strip().decode()
             except:
+                print(message)
+                print('[GameSocket EXCEPTION]')
                 keep_going = False
             else:
                 if not message:
                     break
-
+                
+                print('[TEST] {}'.format(message))
                 message = json.loads(message)
 
-                idx = self.find_other(address)
                 print('  server received: {} form {}'.format(message, address))
                 
                 if message['command'] == "close":
-                    # connection.send("closing".encode())
                     break
                 else:
-                    self.client_list[idx][1].send(json.dumps(message).encode())
+                    self.client_list[0][1].send(json.dumps(message).encode())
+                    self.client_list[1][1].send(json.dumps(message).encode())
 
         connection.close()
         print("close connection")
     
-    def find_other(self, address):
-        if(address[1] == self.client_list[0][0][1]):
-            return 1
-        return 0
+    # def find_other(self, address):
+    #     if(address[1] == self.client_list[0][0][1]):
+    #         return 1
+    #     return 0
